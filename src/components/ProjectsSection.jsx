@@ -22,7 +22,7 @@ function ProjectsSection() {
       subtitle="From autonomous robots to smart IoT devices, our projects are a testament to our passion for innovation."
     >
       <div className="grid-layout">
-        {/* Display only the first 3 projects */}
+        {/* The loop variable here is 'project' */}
         {projects.slice(0, 3).map(project => (
           <GlassCard
             key={project.id}
@@ -30,6 +30,7 @@ function ProjectsSection() {
             title={project.title}
             description={project.description}
             tags={project.tags.map(tag => tag.name)}
+            date={project.published_date}  // Pass the published date to GlassCard
           />
         ))}
       </div>

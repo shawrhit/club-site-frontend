@@ -33,6 +33,7 @@ function BlogSection() {
             title={post.title}
             description={post.summary} // Use the 'summary' field from your model
             tags={post.tags.map(tag => tag.name)} // Map over the nested tags array
+            date={post.published_date}  // Pass the published date to GlassCard
           />
         ))}
       </div>
