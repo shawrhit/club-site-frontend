@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom'; // Import Link for the button
-import Section from './Section';
-import GlassCard from './GlassCard';
+import { Link } from 'react-router-dom'; // Import Link for the back button
+import GlassCard from '../components/GlassCard'; // Note the '../' to go up one directory
 
 const API_BASE_URL = 'http://127.0.0.1:8000';
 
-function BlogSection() {
+function BlogPage() {
   const [blogPosts, setBlogPosts] = useState([]);
 
   useEffect(() => {
+    // Fetch all blog posts from the API
     fetch(`${API_BASE_URL}/api/blog/`)
       .then(response => response.json())
       .then(data => setBlogPosts(data))
@@ -16,14 +16,14 @@ function BlogSection() {
   }, []);
 
   return (
-    <Section
-      id="blog"
-      title="Latest from the Blog"
-      subtitle="Insights, tutorials, and stories from our members. Dive in and learn something new."
-    >
+    <main className="page-container">
+      <div className="page-header">
+        <h1 className="page-title">From the Blog</h1>
+        <p className="page-subtitle">Explore all our articles, tutorials, and club updates.</p>
+      </div>
+      
       <div className="grid-layout">
-        {/* Only show the first 3 posts */}
-        {blogPosts.slice(0, 3).map(post => (
+        {blogPosts.map(post => (
           <GlassCard
             key={post.id}
             imgSrc={post.image}
@@ -35,12 +35,11 @@ function BlogSection() {
         ))}
       </div>
       
-      {/* "See More" button that links to our new page */}
-      <div className="see-more-container">
-        <Link to="/blog" className="see-more-button">See All Posts</Link>
+      <div className="back-link-container">
+        <Link to="/" className="see-more-button">&larr; Back to Home</Link>
       </div>
-    </Section>
+    </main>
   );
 }
 
-export default BlogSection;
+export default BlogPage;

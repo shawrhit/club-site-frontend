@@ -241,3 +241,32 @@ body {
   .see-more-container { text-align: center; }
 }
 
+/* --- Blog Page Layout Styles --- */
+.page-container {
+  padding: 150px 2rem 100px; /* Add padding at the top to clear the fixed header */
+  max-width: 1200px;
+  margin: auto;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.page-title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+
+.page-subtitle {
+  font-size: 1.2rem;
+  color: #a0a0a0;
+  max-width: 600px;
+  margin: auto;
+}
+
+.back-link-container {
+  text-align: center;
+  margin-top: 4rem;
+}

@@ -1,30 +1,33 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
-import HomePage from './pages/HomePage'; // The page you have open in the Canvas
-// Import statements for the other pages will go here later
-// import ProjectsPage from './pages/ProjectsPage';
-// import BlogPage from './pages/BlogPage';
+import HomePage from './pages/HomePage';
+import BlogPage from './pages/BlogPage';
+import ProjectsPage from './pages/ProjectsPage'; // Import new page
+import RoadmapsPage from './pages/RoadmapsPage'; // Import new page
+import TeamPage from './pages/TeamPage';       // Import new page
 
 function App() {
   return (
-    <Router>
-      {/* These components are outside the Routes, so they appear on every page */}
+    <>
+      {/* These shared elements will appear on every page */}
       <div className="background-container">
         <div className="background-gradient"></div>
       </div>
       <Header />
 
-      {/* The Routes component switches between your different pages */}
+      {/* The Routes component will render the correct page based on the URL */}
       <Routes>
-        {/* This route renders the HomePage component when the URL is "/" */}
+        {/* Main landing page */}
         <Route path="/" element={<HomePage />} />
-
-        {/* We will add more routes here for the "See More" pages */}
-        {/* <Route path="/projects" element={<ProjectsPage />} /> */}
-        {/* <Route path="/blog" element={<BlogPage />} /> */}
+        
+        {/* Dedicated pages for each section */}
+        <Route path="/blog" element={<BlogPage />} />
+        <Route path="/projects" element={<ProjectsPage />} />
+        <Route path="/roadmaps" element={<RoadmapsPage />} />
+        <Route path="/team" element={<TeamPage />} />
       </Routes>
-    </Router>
+    </>
   );
 }
 

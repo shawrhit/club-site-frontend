@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Section from './Section';
 
 const API_BASE_URL = 'http://127.0.0.1:8000';
 
-function TeamSection() {
+function TeamPage() {
   const [teamMembers, setTeamMembers] = useState([]);
 
   useEffect(() => {
@@ -15,13 +14,14 @@ function TeamSection() {
   }, []);
 
   return (
-    <Section
-      id="team"
-      title="Meet the Core Team"
-      subtitle="The passionate individuals driving the club's mission and activities."
-    >
+    <main className="page-container">
+      <div className="page-header">
+        <h1 className="page-title">The Core Team</h1>
+        <p className="page-subtitle">The passionate individuals driving the club's mission and activities.</p>
+      </div>
+      
       <div className="grid-layout team-grid">
-        {teamMembers.slice(0, 4).map(member => (
+        {teamMembers.map(member => (
           <div key={member.id} className="glass-card team-card">
             <img src={member.photo} alt={member.name} />
             <h3>{member.name}</h3>
@@ -29,12 +29,12 @@ function TeamSection() {
           </div>
         ))}
       </div>
-      <div className="see-more-container">
-        <Link to="/team" className="see-more-button">See All Members</Link>
+
+      <div className="back-link-container">
+        <Link to="/" className="see-more-button">&larr; Back to Home</Link>
       </div>
-    </Section>
+    </main>
   );
 }
 
-export default TeamSection;
-
+export default TeamPage;

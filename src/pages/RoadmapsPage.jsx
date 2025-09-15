@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Section from './Section';
 
 const API_BASE_URL = 'http://127.0.0.1:8000';
 
-function RoadmapsSection() {
+function RoadmapsPage() {
   const [roadmaps, setRoadmaps] = useState([]);
 
   useEffect(() => {
@@ -15,13 +14,14 @@ function RoadmapsSection() {
   }, []);
 
   return (
-    <Section
-      id="roadmaps"
-      title="Learning Roadmaps"
-      subtitle="Curated learning paths to guide you from beginner to expert in key electronics domains."
-    >
+    <main className="page-container">
+       <div className="page-header">
+        <h1 className="page-title">Learning Roadmaps</h1>
+        <p className="page-subtitle">Your guide to mastering key domains in the world of electronics and software.</p>
+      </div>
+
       <div className="grid-layout">
-        {roadmaps.slice(0, 3).map(roadmap => (
+        {roadmaps.map(roadmap => (
           <div key={roadmap.id} className="glass-card roadmap-card">
             <div className="icon">{roadmap.icon_name}</div>
             <h3>{roadmap.title}</h3>
@@ -30,12 +30,12 @@ function RoadmapsSection() {
           </div>
         ))}
       </div>
-       <div className="see-more-container">
-        <Link to="/roadmaps" className="see-more-button">See All Roadmaps</Link>
+
+       <div className="back-link-container">
+        <Link to="/" className="see-more-button">&larr; Back to Home</Link>
       </div>
-    </Section>
+    </main>
   );
 }
 
-export default RoadmapsSection;
-
+export default RoadmapsPage;
