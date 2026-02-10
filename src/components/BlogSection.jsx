@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom'; // Import Link for the button
+import { Link } from 'react-router-dom';
 import Section from './Section';
 import GlassCard from './GlassCard';
 
@@ -18,24 +18,25 @@ function BlogSection() {
   return (
     <Section
       id="blog"
+      eyebrow="LATEST"
       title="Latest from the Blog"
       subtitle="Insights, tutorials, and stories from our members. Dive in and learn something new."
     >
       <div className="grid-layout">
-        {/* Only show the first 3 posts */}
-        {blogPosts.slice(0, 3).map(post => (
-          <GlassCard
-            key={post.id}
-            imgSrc={post.image}
-            title={post.title}
-            description={post.summary}
-            tags={post.tags.map(tag => tag.name)}
-            date={post.publish_date}
-          />
+        {blogPosts.slice(0, 3).map((post, index) => (
+          <Link to={`/blog/${post.id}`} key={post.id} className="card-link">
+            <GlassCard
+              imgSrc={post.image}
+              title={post.title}
+              description={post.summary}
+              tags={post.tags.map(tag => tag.name)}
+              date={post.publish_date}
+              className={`card-variant-${(index % 4) + 1}`}
+            />
+          </Link>
         ))}
       </div>
       
-      {/* "See More" button that links to our new page */}
       <div className="see-more-container">
         <Link to="/blog" className="see-more-button">See All Posts</Link>
       </div>

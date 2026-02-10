@@ -17,16 +17,16 @@ function TeamPage() {
     <main className="page-container">
       <div className="page-header">
         <h1 className="page-title">The Core Team</h1>
-        <p className="page-subtitle">The passionate individuals driving the club's mission and activities.</p>
+        <p className="page-subtitle">The passionate individuals driving GDG NEHU's mission and activities.</p>
       </div>
       
       <div className="grid-layout team-grid">
         {teamMembers.map(member => (
-          <div key={member.id} className="glass-card team-card">
+          <Link to={`/team/${member.id}`} key={member.id} className="glass-card team-card card-link">
             <img src={member.photo} alt={member.name} />
             <h3>{member.name}</h3>
             <p>{member.role}</p>
-          </div>
+          </Link>
         ))}
       </div>
 

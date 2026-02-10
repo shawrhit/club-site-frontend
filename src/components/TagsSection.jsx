@@ -5,7 +5,12 @@ const exploreTags = ["Arduino", "Raspberry Pi", "IoT", "Robotics", "AI / ML", "P
 
 function TagsSection() {
   return (
-    <Section id="tags" title="Explore Topics" subtitle="Dive into the topics that interest you the most. Find related projects, blog posts, and resources.">
+    <Section
+      id="tags"
+      eyebrow="EXPLORE"
+      title="Explore Topics"
+      subtitle="Dive into the topics that interest you the most. Find related projects, blog posts, and resources."
+    >
         <div className="explore-tags-container">
             {exploreTags.map(tag => (
                 <a href="#" key={tag} className="explore-tag">{tag}</a>

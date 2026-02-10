@@ -1,17 +1,16 @@
 import React from 'react';
 
-// Receive the new 'date' prop
-function GlassCard({ imgSrc, title, description, tags, date }) {
-  
-  // A helper function to format the date nicely
-  const formattedDate = date ? new Date(date).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  }) : null;
+function GlassCard({ imgSrc, title, description, tags = [], date, className = '' }) {
+  const formattedDate = date
+    ? new Date(date).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
+    : null;
 
   return (
-    <div className="glass-card">
+    <div className={`glass-card ${className}`.trim()}>
       {imgSrc && <img src={imgSrc} alt={title} />}
       <div className="card-content">
         <h3>{title}</h3>

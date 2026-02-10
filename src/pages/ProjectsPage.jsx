@@ -6,6 +6,7 @@ const API_BASE_URL = 'http://127.0.0.1:8000';
 
 function ProjectsPage() {
   const [projects, setProjects] = useState([]);
+  const getTagName = (tag) => (typeof tag === 'string' ? tag : tag?.name);
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/api/projects/`)
@@ -23,14 +24,15 @@ function ProjectsPage() {
       
       <div className="grid-layout">
         {projects.map(project => (
-          <GlassCard
-            key={project.id}
-            imgSrc={project.image}
-            title={project.title}
-            description={project.description}
-            tags={project.tags.map(tag => tag.name)}
-            date={project.publish_date}
-          />
+          <Link to={`/projects/${project.id}`} key={project.id} className="card-link">
+            <GlassCard
+              imgSrc={project.image}
+              title={project.title}
+              description={project.description}
+              tags={(project.tags || []).map(getTagName).filter(Boolean)}
+              date={project.published_date}
+            />
+          </Link>
         ))}
       </div>
       

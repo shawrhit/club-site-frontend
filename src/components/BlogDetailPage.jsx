@@ -1,22 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import DOMPurify from 'dompurify';
-import GlassCard from '../components/GlassCard'; // We'll reuse our card for related posts
+import GlassCard from '../components/GlassCard';
 
 const API_BASE_URL = 'http://127.0.0.1:8000';
 
 function BlogDetailPage() {
   const { postId } = useParams();
   const [post, setPost] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    // When the postId changes, scroll to the top of the new page
     window.scrollTo(0, 0); 
-    
+    setIsLoading(true);
+    setErrorMessage('');
+
     fetch(`${API_BASE_URL}/api/blog/${postId}/`)
-      .then(response => response.json())
-      .then(data => setPost(data))
-      .catch(error => console.error('Error fetching post:', error));
+      .then(response => (response.ok ? response.json() : Promise.reject(new Error('Request failed'))))
+      .then(data => {
+        setPost(data);
+        setIsLoading(false);
+      })
+      .catch(() => {
+        setErrorMessage('Unable to load this post right now.');
+        setIsLoading(false);
+      });
   }, [postId]);
 
   useEffect(() => {
@@ -28,74 +37,124 @@ function BlogDetailPage() {
     }
   }, [post]);
 
-  if (!post) {
-    return <main className="page-container"><div>Loading...</div></main>;
+  if (isLoading) {
+    return (
+      <main className="page-container">
+        <div className="blog-post-container">Loading...</div>
+      </main>
+    );
   }
 
-  const sanitizedContent = DOMPurify.sanitize(post.content);
-  const formattedDate = new Date(post.publish_date).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
+  if (errorMessage || !post) {
+    return (
+      <main className="page-container">
+        <div className="blog-post-container">
+          <p>{errorMessage || 'This post is unavailable.'}</p>
+          <div className="back-link-container">
+            <Link to="/blog" className="see-more-button">&larr; All Posts</Link>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  const sanitizedContent = DOMPurify.sanitize(post.content || '<p>No content yet.</p>');
+  const formattedDate = post.published_date
+    ? new Date(post.published_date).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
+    : '';
+  const tagList = (post.tags || []).map(tag => (typeof tag === 'string' ? tag : tag.name)).filter(Boolean);
+  const relatedPosts = post.related_posts || [];
+  const summaryText = post.summary || '';
 
   return (
-    <main className="page-container">
-      <div className="blog-post-container">
-        {/* --- NEW VERGE-INSPIRED HEADER --- */}
-        <div className="blog-post-header">
-          <p className="post-category">ELECTROPHOENIX BLOG</p>
-          <h1 className="blog-post-title">{post.title}</h1>
-          {post.author && (
-            <p className="blog-post-meta">
-              by <strong>{post.author.name}</strong> on {formattedDate}
-            </p>
-          )}
-        </div>
-        
-        <div 
-          className="blog-post-content" 
-          dangerouslySetInnerHTML={{ __html: sanitizedContent }} 
-        />
-        
-        {post.author && (
-          <div className="author-box">
-            <img src={post.author.photo} alt={post.author.name} className="author-photo" />
-            <div className="author-details">
-              <h3>About the Author</h3>
-              <p className="author-name">{post.author.name}</p>
-              <p>{post.author.bio}</p>
-              {post.author.linkedin_url && (
-                <a href={post.author.linkedin_url} target="_blank" rel="noopener noreferrer" className="author-link">
-                  Visit Profile
-                </a>
-              )}
-            </div>
+    <main className="blog-detail-page">
+      <section className="blog-hero blog-hero-detail hero-yellow">
+        <div className="blog-hero-inner">
+          <div className="blog-hero-media">
+            {post.image ? (
+              <img src={post.image} alt={post.title} />
+            ) : (
+              <div className="blog-hero-placeholder" aria-hidden="true" />
+            )}
           </div>
-        )}
-        
-        {/* --- NEW "YOU MAY ALSO LIKE" SECTION --- */}
-        {post.related_posts && post.related_posts.length > 0 && (
-          <div className="related-posts-section">
-            <h2 className="related-posts-title">You may also like</h2>
-            <div className="grid-layout">
-              {post.related_posts.map(relatedPost => (
-                <Link to={`/blog/${relatedPost.id}`} key={relatedPost.id} className="card-link">
-                  <GlassCard
-                    imgSrc={relatedPost.image}
-                    title={relatedPost.title}
-                    description={relatedPost.summary}
-                    date={relatedPost.publish_date}
-                    tags={[]} // Tags aren't needed for these smaller cards
-                  />
-                </Link>
+          <div className="blog-hero-content">
+            <p className="post-category">CLUB BLOG</p>
+            <div className="blog-hero-tags">
+              {tagList.slice(0, 3).map((tag) => (
+                <span key={tag} className="blog-hero-tag">
+                  {tag}
+                </span>
               ))}
             </div>
+            <h1 className="blog-hero-title">{post.title}</h1>
+            {summaryText && <p className="blog-hero-dek">{summaryText}</p>}
+            {(post.author_name || formattedDate) && (
+              <p className="blog-hero-meta">
+                {post.author_name && (
+                  <span className="blog-hero-byline">by {post.author_name}</span>
+                )}
+                {formattedDate && (
+                  <span className="blog-hero-date">{formattedDate}</span>
+                )}
+              </p>
+            )}
           </div>
-        )}
-        
-        <div className="back-link-container">
-          <Link to="/blog" className="see-more-button">&larr; All Posts</Link>
+        </div>
+      </section>
+
+      <div className="page-container">
+        <div className="blog-post-container">
+          <div
+            className="blog-post-content"
+            dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+          />
+
+          {post.author && (
+            <div className="author-box">
+              {post.author.photo ? (
+                <img src={post.author.photo} alt={post.author.name} className="author-photo" />
+              ) : (
+                <div className="author-photo author-photo-placeholder" aria-hidden="true" />
+              )}
+              <div className="author-details">
+                <h3>About the Author</h3>
+                <p className="author-name">{post.author.name}</p>
+                <p>{post.author.bio}</p>
+                {post.author.linkedin_url && (
+                  <a href={post.author.linkedin_url} target="_blank" rel="noopener noreferrer" className="author-link">
+                    Visit Profile
+                  </a>
+                )}
+              </div>
+            </div>
+          )}
+
+          {relatedPosts && relatedPosts.length > 0 && (
+            <div className="related-posts-section">
+              <h2 className="related-posts-title">You may also like</h2>
+              <div className="grid-layout">
+                {relatedPosts.map((relatedPost) => (
+                  <Link to={`/blog/${relatedPost.id}`} key={relatedPost.id} className="card-link">
+                    <GlassCard
+                      imgSrc={relatedPost.image}
+                      title={relatedPost.title}
+                      description={relatedPost.summary}
+                      date={relatedPost.publish_date}
+                      tags={[]}
+                    />
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className="back-link-container">
+            <Link to="/blog" className="see-more-button">&larr; All Posts</Link>
+          </div>
         </div>
       </div>
     </main>

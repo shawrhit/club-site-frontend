@@ -7,6 +7,7 @@ const API_BASE_URL = 'http://127.0.0.1:8000';
 
 function ProjectsSection() {
   const [projects, setProjects] = useState([]);
+  const getTagName = (tag) => (typeof tag === 'string' ? tag : tag?.name);
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/api/projects/`)
@@ -18,20 +19,22 @@ function ProjectsSection() {
   return (
     <Section
       id="projects"
+      eyebrow="FEATURED"
       title="What We Build"
       subtitle="From autonomous robots to smart IoT devices, our projects are a testament to our passion for innovation."
     >
       <div className="grid-layout">
-        {/* The loop variable here is 'project' */}
-        {projects.slice(0, 3).map(project => (
-          <GlassCard
-            key={project.id}
-            imgSrc={project.image}
-            title={project.title}
-            description={project.description}
-            tags={project.tags.map(tag => tag.name)}
-            date={project.published_date}  // Pass the published date to GlassCard
-          />
+        {projects.slice(0, 3).map((project, index) => (
+          <Link to={`/projects/${project.id}`} key={project.id} className="card-link">
+            <GlassCard
+              imgSrc={project.image}
+              title={project.title}
+              description={project.description}
+              tags={(project.tags || []).map(getTagName).filter(Boolean)}
+              date={project.published_date}
+              className={`card-variant-${(index % 4) + 1}`}
+            />
+          </Link>
         ))}
       </div>
       <div className="see-more-container">

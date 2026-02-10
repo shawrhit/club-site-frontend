@@ -17,16 +17,21 @@ function TeamSection() {
   return (
     <Section
       id="team"
+      eyebrow="PEOPLE"
       title="Meet the Core Team"
-      subtitle="The passionate individuals driving the club's mission and activities."
+      subtitle="The passionate individuals driving GDG NEHU's mission and activities."
     >
       <div className="grid-layout team-grid">
-        {teamMembers.slice(0, 4).map(member => (
-          <div key={member.id} className="glass-card team-card">
+        {teamMembers.slice(0, 4).map((member, index) => (
+          <Link
+            key={member.id}
+            to={`/team/${member.id}`}
+            className={`glass-card team-card card-variant-${(index % 4) + 1} card-link`}
+          >
             <img src={member.photo} alt={member.name} />
             <h3>{member.name}</h3>
             <p>{member.role}</p>
-          </div>
+          </Link>
         ))}
       </div>
       <div className="see-more-container">

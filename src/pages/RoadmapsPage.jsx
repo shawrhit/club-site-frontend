@@ -22,12 +22,16 @@ function RoadmapsPage() {
 
       <div className="grid-layout">
         {roadmaps.map(roadmap => (
-          <div key={roadmap.id} className="glass-card roadmap-card">
+          <Link
+            key={roadmap.id}
+            to={`/roadmaps/${roadmap.id}`}
+            className="glass-card roadmap-card card-link"
+          >
             <div className="icon">{roadmap.icon_name}</div>
             <h3>{roadmap.title}</h3>
             <p>{roadmap.description}</p>
-            <a href="#" className="cta-link">Start Learning →</a>
-          </div>
+            <span className="cta-link">Start Learning →</span>
+          </Link>
         ))}
       </div>
 
