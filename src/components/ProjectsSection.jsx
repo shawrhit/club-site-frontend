@@ -2,14 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Section from './Section';
 import GlassCard from './GlassCard';
-import { apiFetch } from '../api';
+
+const API_BASE_URL = 'http://127.0.0.1:8000';
 
 function ProjectsSection() {
   const [projects, setProjects] = useState([]);
   const getTagName = (tag) => (typeof tag === 'string' ? tag : tag?.name);
 
   useEffect(() => {
-    apiFetch('/api/projects/')
+    fetch(`${API_BASE_URL}/api/projects/`)
       .then(response => response.json())
       .then(data => setProjects(data))
       .catch(error => console.error('Error fetching projects:', error));

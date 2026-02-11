@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import DOMPurify from 'dompurify';
 import GlassCard from '../components/GlassCard';
-import { apiFetch } from '../api';
+
+const API_BASE_URL = 'http://127.0.0.1:8000';
 
 function BlogDetailPage() {
   const { postId } = useParams();
@@ -15,7 +16,7 @@ function BlogDetailPage() {
     setIsLoading(true);
     setErrorMessage('');
 
-    apiFetch(`/api/blog/${postId}/`)
+    fetch(`${API_BASE_URL}/api/blog/${postId}/`)
       .then(response => (response.ok ? response.json() : Promise.reject(new Error('Request failed'))))
       .then(data => {
         setPost(data);

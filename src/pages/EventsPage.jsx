@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import GlassCard from '../components/GlassCard';
-import { apiFetch } from '../api';
+
+const API_BASE_URL = 'http://127.0.0.1:8000';
 
 function EventsPage() {
   const [events, setEvents] = useState([]);
@@ -20,7 +21,7 @@ function EventsPage() {
   const getTagName = (tag) => (typeof tag === 'string' ? tag : tag?.name);
 
   useEffect(() => {
-    apiFetch('/api/events/')
+    fetch(`${API_BASE_URL}/api/events/`)
       .then((response) => response.json())
       .then((data) => {
         // Sort newest first so the hero reflects the latest event.

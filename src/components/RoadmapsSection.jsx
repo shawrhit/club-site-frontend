@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Section from './Section';
-import { apiFetch } from '../api';
+
+const API_BASE_URL = 'http://127.0.0.1:8000';
 
 function RoadmapsSection() {
   const [roadmaps, setRoadmaps] = useState([]);
 
   useEffect(() => {
-    apiFetch('/api/roadmaps/')
+    fetch(`${API_BASE_URL}/api/roadmaps/`)
       .then(response => response.json())
       .then(data => setRoadmaps(data))
       .catch(error => console.error('Error fetching roadmaps:', error));

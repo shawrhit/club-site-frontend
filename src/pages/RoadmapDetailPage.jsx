@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import DOMPurify from 'dompurify';
-import { apiFetch } from '../api';
+
+const API_BASE_URL = 'http://127.0.0.1:8000';
 
 function RoadmapDetailPage() {
   const { roadmapId } = useParams();
@@ -14,7 +15,7 @@ function RoadmapDetailPage() {
     setIsLoading(true);
     setErrorMessage('');
 
-    apiFetch(`/api/roadmaps/${roadmapId}/`)
+    fetch(`${API_BASE_URL}/api/roadmaps/${roadmapId}/`)
       .then((response) => (response.ok ? response.json() : Promise.reject(new Error('Request failed'))))
       .then((data) => {
         setRoadmap(data);

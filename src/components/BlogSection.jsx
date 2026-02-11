@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Section from './Section';
 import GlassCard from './GlassCard';
-import { apiFetch } from '../api';
+
+const API_BASE_URL = 'http://127.0.0.1:8000';
 
 function BlogSection() {
   const [blogPosts, setBlogPosts] = useState([]);
 
   useEffect(() => {
-    apiFetch('/api/blog/')
+    fetch(`${API_BASE_URL}/api/blog/`)
       .then(response => response.json())
       .then(data => setBlogPosts(data))
       .catch(error => console.error('Error fetching blog posts:', error));

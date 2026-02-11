@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import DOMPurify from 'dompurify';
-import { apiFetch } from '../api';
+
+const API_BASE_URL = 'http://127.0.0.1:8000';
 
 function EventDetailPage() {
   const { eventId } = useParams();
@@ -14,7 +15,7 @@ function EventDetailPage() {
     setIsLoading(true);
     setErrorMessage('');
 
-    apiFetch(`/api/events/${eventId}/`)
+    fetch(`${API_BASE_URL}/api/events/${eventId}/`)
       .then((response) => (response.ok ? response.json() : Promise.reject(new Error('Request failed'))))
       .then((data) => {
         setEvent(data);
