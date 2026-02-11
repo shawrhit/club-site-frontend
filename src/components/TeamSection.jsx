@@ -27,7 +27,7 @@ function TeamSection() {
             to={`/team/${member.id}`}
             className={`glass-card team-card card-variant-${(index % 4) + 1} card-link`}
           >
-            <img src={member.photo} alt={member.name} />
+            <img src={member.photo_url} alt={member.name} />
             <h3>{member.name}</h3>
             <p>{member.role}</p>
           </Link>

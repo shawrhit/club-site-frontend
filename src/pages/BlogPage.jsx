@@ -37,8 +37,8 @@ function BlogPage() {
       <section className="blog-hero hero-yellow">
         <div className="blog-hero-inner">
           <div className="blog-hero-media">
-            {heroPost?.image ? (
-              <img src={heroPost.image} alt={heroPost.title} />
+            {heroPost?.image_url ? (
+              <img src={heroPost.image_url} alt={heroPost.title} />
             ) : (
               <div className="blog-hero-placeholder" aria-hidden="true" />
             )}
@@ -92,10 +92,10 @@ function BlogPage() {
           {remainingPosts.map((post) => (
             <Link to={`/blog/${post.id}`} key={post.id} className="card-link">
               <GlassCard
-                imgSrc={post.image}
+                imgSrc={post.image_url}
                 title={post.title}
                 description={post.summary}
-                tags={post.tags.map(getTagName).filter(Boolean)}
+                tags={(post.tags || []).map(getTagName).filter(Boolean)}
                 date={post.published_date}
               />
             </Link>

@@ -145,8 +145,8 @@ function TeamMemberPage() {
       <section className="blog-hero blog-hero-detail">
         <div className="blog-hero-inner">
           <div className="blog-hero-media">
-            {member.photo ? (
-              <img src={member.photo} alt={member.name} />
+            {member.photo_url ? (
+              <img src={member.photo_url} alt={member.name} />
             ) : (
               <div className="blog-hero-placeholder" aria-hidden="true" />
             )}

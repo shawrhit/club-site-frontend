@@ -63,8 +63,8 @@ function EventDetailPage() {
       <section className="blog-hero blog-hero-detail hero-green">
         <div className="blog-hero-inner">
           <div className="blog-hero-media">
-            {event.image ? (
-              <img src={event.image} alt={event.title} />
+            {event.image_url ? (
+              <img src={event.image_url} alt={event.title} />
             ) : (
               <div className="blog-hero-placeholder" aria-hidden="true" />
             )}

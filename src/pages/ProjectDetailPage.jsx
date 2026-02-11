@@ -63,8 +63,8 @@ function ProjectDetailPage() {
       <section className="blog-hero blog-hero-detail hero-blue">
         <div className="blog-hero-inner">
           <div className="blog-hero-media">
-            {project.image ? (
-              <img src={project.image} alt={project.title} />
+            {project.image_url ? (
+              <img src={project.image_url} alt={project.title} />
             ) : (
               <div className="blog-hero-placeholder" aria-hidden="true" />
             )}

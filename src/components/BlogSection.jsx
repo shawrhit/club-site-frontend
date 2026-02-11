@@ -25,11 +25,11 @@ function BlogSection() {
         {blogPosts.slice(0, 3).map((post, index) => (
           <Link to={`/blog/${post.id}`} key={post.id} className="card-link">
             <GlassCard
-              imgSrc={post.image}
+              imgSrc={post.image_url}
               title={post.title}
               description={post.summary}
-              tags={post.tags.map(tag => tag.name)}
-              date={post.publish_date}
+              tags={(post.tags || []).map(tag => tag.name)}
+              date={post.published_date}
               className={`card-variant-${(index % 4) + 1}`}
             />
           </Link>

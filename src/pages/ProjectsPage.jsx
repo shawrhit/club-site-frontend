@@ -25,7 +25,7 @@ function ProjectsPage() {
         {projects.map(project => (
           <Link to={`/projects/${project.id}`} key={project.id} className="card-link">
             <GlassCard
-              imgSrc={project.image}
+              imgSrc={project.image_url}
               title={project.title}
               description={project.description}
               tags={(project.tags || []).map(getTagName).filter(Boolean)}

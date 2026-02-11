@@ -22,7 +22,7 @@ function TeamPage() {
       <div className="grid-layout team-grid">
         {teamMembers.map(member => (
           <Link to={`/team/${member.id}`} key={member.id} className="glass-card team-card card-link">
-            <img src={member.photo} alt={member.name} />
+            <img src={member.photo_url} alt={member.name} />
             <h3>{member.name}</h3>
             <p>{member.role}</p>
           </Link>

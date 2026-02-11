@@ -27,7 +27,7 @@ function EventsSection() {
         {events.slice(0, 3).map((event, index) => (
           <Link to={`/events/${event.id}`} key={event.id} className="card-link">
             <GlassCard
-              imgSrc={event.image}
+              imgSrc={event.image_url}
               title={event.title}
               description={event.summary}
               tags={(event.tags || []).map(getTagName).filter(Boolean)}

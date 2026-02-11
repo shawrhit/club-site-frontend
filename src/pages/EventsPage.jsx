@@ -37,8 +37,8 @@ function EventsPage() {
       <section className="blog-hero hero-green">
         <div className="blog-hero-inner">
           <div className="blog-hero-media">
-            {heroEvent?.image ? (
-              <img src={heroEvent.image} alt={heroEvent.title} />
+            {heroEvent?.image_url ? (
+              <img src={heroEvent.image_url} alt={heroEvent.title} />
             ) : (
               <div className="blog-hero-placeholder" aria-hidden="true" />
             )}
@@ -83,7 +83,7 @@ function EventsPage() {
           {remainingEvents.map((event) => (
             <Link to={`/events/${event.id}`} key={event.id} className="card-link">
               <GlassCard
-                imgSrc={event.image}
+                imgSrc={event.image_url}
                 title={event.title}
                 description={event.summary}
                 tags={(event.tags || []).map(getTagName).filter(Boolean)}

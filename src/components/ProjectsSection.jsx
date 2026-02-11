@@ -26,7 +26,7 @@ function ProjectsSection() {
         {projects.slice(0, 3).map((project, index) => (
           <Link to={`/projects/${project.id}`} key={project.id} className="card-link">
             <GlassCard
-              imgSrc={project.image}
+              imgSrc={project.image_url}
               title={project.title}
               description={project.description}
               tags={(project.tags || []).map(getTagName).filter(Boolean)}
