@@ -12,6 +12,8 @@ import RoadmapsPage from './pages/RoadmapsPage';
 import RoadmapDetailPage from './pages/RoadmapDetailPage';
 import TeamPage from './pages/TeamPage';
 import TeamMemberPage from './pages/TeamMemberPage';
+import TagPage from './pages/TagPage';
+import Footer from './components/Footer';
 
 function App() {
   return (
@@ -31,9 +33,11 @@ function App() {
         <Route path="/projects/:projectId" element={<ProjectDetailPage />} />
         <Route path="/roadmaps" element={<RoadmapsPage />} />
         <Route path="/roadmaps/:roadmapId" element={<RoadmapDetailPage />} />
+        <Route path="/tags/:slug" element={<TagPage />} />
         <Route path="/team" element={<TeamPage />} />
         <Route path="/team/:memberId" element={<TeamMemberPage />} />
       </Routes>
+      <Footer />
     </>
   );
 }

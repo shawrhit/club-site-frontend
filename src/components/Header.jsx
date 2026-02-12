@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState, useRef } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { apiFetch } from '../api';
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -20,11 +21,119 @@ function Header() {
     setTheme(prevTheme => (prevTheme === 'dark' ? 'light' : 'dark'));
   };
 
+  // Search state
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState(null);
+  const [searching, setSearching] = useState(false);
+  const [showResults, setShowResults] = useState(false);
+  const searchTimer = useRef(null);
+  const abortController = useRef(null);
+  const navigate = useNavigate();
+  const searchRef = useRef(null);
+  const [showSearchInput, setShowSearchInput] = useState(false);
+
+  useEffect(() => {
+    const onDocClick = (e) => {
+      if (searchRef.current && !searchRef.current.contains(e.target)) {
+        setShowResults(false);
+      }
+    };
+
+    document.addEventListener('click', onDocClick);
+
+    return () => {
+      if (searchTimer.current) clearTimeout(searchTimer.current);
+      if (abortController.current) abortController.current.abort();
+      document.removeEventListener('click', onDocClick);
+    };
+  }, []);
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === 'Escape') {
+        setShowResults(false);
+      }
+    };
+    if (showResults) document.addEventListener('keydown', onKey);
+    return () => { document.removeEventListener('keydown', onKey); };
+  }, [showResults]);
+
+  const closeSearch = () => {
+    setShowResults(false);
+    setSearchQuery('');
+    setSearchResults(null);
+    setShowSearchInput(false);
+    if (searchRef.current) {
+      const input = searchRef.current.querySelector('input');
+      if (input) input.blur();
+    }
+  };
+
+  const toggleSearchInput = () => {
+    if (showSearchInput) {
+      closeSearch();
+      return;
+    }
+    setShowSearchInput(true);
+    setShowResults(!!searchResults);
+    // focus the input after render
+    setTimeout(() => {
+      if (searchRef.current) {
+        const input = searchRef.current.querySelector('input');
+        if (input) input.focus();
+      }
+    }, 50);
+  };
+
+  const runSearch = (q) => {
+    if (!q || q.length < 2) {
+      setSearchResults(null);
+      setSearching(false);
+      return;
+    }
+    setSearching(true);
+    if (abortController.current) abortController.current.abort();
+    abortController.current = new AbortController();
+    apiFetch(`/api/search/?q=${encodeURIComponent(q)}`, { signal: abortController.current.signal })
+      .then(res => res.ok ? res.json() : Promise.reject(new Error('Search failed')))
+      .then(data => {
+        setSearchResults(data);
+        setSearching(false);
+        setShowResults(true);
+      })
+      .catch(() => {
+        setSearchResults(null);
+        setSearching(false);
+      });
+  };
+
+  const onSearchChange = (e) => {
+    const q = e.target.value;
+    setSearchQuery(q);
+    if (searchTimer.current) clearTimeout(searchTimer.current);
+    searchTimer.current = setTimeout(() => runSearch(q.trim()), 300);
+  };
+
+  const handleResultClick = (type, id) => {
+    setShowResults(false);
+    setSearchQuery('');
+    setSearchResults(null);
+    // navigate to appropriate detail page
+    if (type === 'blogs') navigate(`/blog/${id}`);
+    else if (type === 'projects') navigate(`/projects/${id}`);
+    else if (type === 'team') navigate(`/team/${id}`);
+    else if (type === 'events') navigate(`/events/${id}`);
+    else if (type === 'roadmaps') navigate(`/roadmaps/${id}`);
+  };
+
   return (
     <header className="main-header" id="mainHeader">
       <nav className="navbar">
         <div className="logo">
-          <Link to="/">Google Developer's Group, NEHU</Link>
+          <Link to="/">
+            <span className="brand-full">Google Developer's Group, NEHU</span>
+            <span className="brand-short">GDG NEHU</span>
+          </Link>
         </div>
 
         <ul className="nav-links">
@@ -34,7 +143,64 @@ function Header() {
           <li><Link to="/roadmaps">Roadmaps</Link></li>
           <li><Link to="/team">Team</Link></li>
         </ul>
-        <div className="nav-actions">
+        
+        <div className={`nav-actions ${showSearchInput ? 'nav-actions--hide-controls' : ''}`}>
+          <div className="header-search" ref={searchRef}>
+            <button type="button" className="search-toggle" onClick={toggleSearchInput} aria-label="Open search">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="6" />
+                <path d="M21 21l-4.35-4.35" />
+              </svg>
+            </button>
+
+            <input
+              className={`search-input ${showSearchInput ? 'visible' : ''}`}
+              placeholder="Search site..."
+              value={searchQuery}
+              onChange={onSearchChange}
+              onFocus={() => { if (searchResults) setShowResults(true); setShowSearchInput(true); }}
+              aria-label="Search site"
+            />
+            <button type="button" className="search-close" onClick={closeSearch} aria-label="Close search">×</button>
+            <div className={`search-results ${showResults ? 'visible' : ''}`} role="listbox">
+              {searching && <div className="search-loading">Searching…</div>}
+              {!searching && searchResults && (
+                <div>
+                  {['blogs','projects','events','team','roadmaps'].map((section) => (
+                    searchResults[section] && searchResults[section].length > 0 && (
+                      <div key={section} className="search-section">
+                        <div className="search-section-title">{section}</div>
+                        {searchResults[section].map(item => (
+                          <button key={`${section}-${item.id}`} className="search-item" onClick={() => handleResultClick(section, item.id)}>
+                            {item.image_url ? (
+                              <img className="search-item-thumb" src={item.image_url} alt="" />
+                            ) : (
+                              <div className="search-item-thumb fallback">{(item.title||item.name||'').charAt(0)}</div>
+                            )}
+                            <div className="search-item-body">
+                              <div className="search-item-title">{item.title || item.name || item.author_name}</div>
+                              {item.summary && <div className="search-item-summary">{item.summary}</div>}
+                              {item.tags && item.tags.length > 0 && (
+                                <div className="search-item-tags">
+                                  {item.tags.slice(0,3).map((t, i) => (
+                                    <span key={i} className="tag-chip">{t.name}</span>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    )
+                  ))}
+                </div>
+              )}
+              {!searching && !searchResults && searchQuery.length >= 2 && (
+                <div className="search-empty">No results</div>
+              )}
+            </div>
+          </div>
+
           <button
             type="button"
             className="theme-toggle"
