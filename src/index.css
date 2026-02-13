@@ -1793,3 +1793,184 @@ body[data-theme="dark"] .member-social-icon {
 
 
 
+.footer-dev-link {
+  color: var(--muted-text);
+  font-size: 0.85rem;
+  margin-top: 4px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.footer-dev-link:hover {
+  color: var(--text-color);
+}
+
+@media (max-width: 720px) {
+  .footer-dev-link {
+    display: none;
+  }
+}
+
+.dev-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 110px 1.5rem 3rem;
+}
+
+.dev-shell h1 {
+  font-size: clamp(2rem, 6vw, 3.2rem);
+  margin-bottom: 0.5rem;
+}
+
+.dev-subtitle {
+  color: var(--muted-text);
+  max-width: 760px;
+  margin-bottom: 2rem;
+}
+
+.dev-back-link {
+  display: inline-block;
+  margin-bottom: 1.25rem;
+  font-weight: 600;
+  color: var(--muted-text);
+}
+
+.dev-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.dev-card {
+  background: var(--glass-bg);
+  border: 2px solid var(--border-color);
+  border-radius: 20px;
+  padding: 1rem;
+  box-shadow: 0 8px 0 var(--shadow-color);
+}
+
+.dev-card h2 {
+  font-size: 1.1rem;
+  margin-bottom: 0.7rem;
+}
+
+.dev-card ul {
+  margin-left: 1.2rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.shooter-board {
+  position: relative;
+  height: 260px;
+  overflow: hidden;
+  border-radius: 14px;
+  border: 2px solid var(--border-color);
+  margin-top: 0.8rem;
+  background:
+    radial-gradient(circle at 20% 18%, rgba(255, 255, 255, 0.16) 1.2px, transparent 2px),
+    radial-gradient(circle at 70% 62%, rgba(255, 255, 255, 0.14) 1px, transparent 2px),
+    radial-gradient(circle at 44% 40%, rgba(255, 255, 255, 0.14) 1px, transparent 2px),
+    linear-gradient(180deg, #0e1838, #091226 68%, #050a16);
+  background-size: 120px 120px, 160px 160px, 140px 140px, auto;
+}
+
+.enemy-sprite,
+.bullet-sprite,
+.ship-sprite {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  user-select: none;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.enemy-sprite {
+  color: #ff8a6b;
+  text-shadow: 0 0 10px rgba(255, 138, 107, 0.6);
+}
+
+.bullet-sprite {
+  color: #ffd85a;
+  text-shadow: 0 0 8px rgba(255, 216, 90, 0.8);
+}
+
+.ship-sprite {
+  left: 50%;
+  top: 92%;
+  color: #74f3b5;
+  text-shadow: 0 0 10px rgba(116, 243, 181, 0.7);
+}
+
+.game-over-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.58);
+  color: #ffffff;
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.shooter-hud {
+  margin-top: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  font-weight: 700;
+}
+
+.shooter-controls {
+  margin-top: 0.8rem;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.shooter-controls button {
+  border: 2px solid var(--border-color);
+  background: #ffffff;
+  color: #111;
+  border-radius: 999px;
+  padding: 0.45rem 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.control-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.05rem;
+  line-height: 1;
+  min-width: 1.2rem;
+}
+
+@media (max-width: 520px) {
+  .shooter-controls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+body[data-theme="dark"] .shooter-controls button {
+  background: #151515;
+  color: #ffffff;
+}
+
+body[data-theme="dark"] .shooter-board {
+  background:
+    radial-gradient(circle at 20% 18%, rgba(255, 255, 255, 0.2) 1.2px, transparent 2px),
+    radial-gradient(circle at 70% 62%, rgba(255, 255, 255, 0.18) 1px, transparent 2px),
+    radial-gradient(circle at 44% 40%, rgba(255, 255, 255, 0.18) 1px, transparent 2px),
+    linear-gradient(180deg, #101a3c, #0b1531 68%, #070d1b);
+}
+
+body[data-theme="dark"] .game-over-overlay {
+  background: rgba(0, 0, 0, 0.64);
+}
+

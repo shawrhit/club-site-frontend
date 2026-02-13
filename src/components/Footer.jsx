@@ -19,7 +19,9 @@ export default function Footer() {
 
         <div className="footer-col footer-contact">
           <a href="mailto:gdgnehu@gmail.com">gdgnehu@gmail.com</a>
-          <p className="muted">Developed and maintained by GDG NEHU</p>
+          <Link to="/dev" className="footer-dev-link" aria-label="Open developer easter egg page">
+            Developed and maintained by GDG NEHU
+          </Link>
         </div>
       </div>
     </footer>

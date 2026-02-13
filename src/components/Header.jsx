@@ -114,6 +114,17 @@ function Header() {
     searchTimer.current = setTimeout(() => runSearch(q.trim()), 300);
   };
 
+  // Helper to determine if any section returned results
+  const resultSections = ['blogs','projects','events','team','roadmaps'];
+  const hasAnyResults = (() => {
+    if (!searchResults) return false;
+    try {
+      return resultSections.some(s => Array.isArray(searchResults[s]) && searchResults[s].length > 0);
+    } catch (e) {
+      return false;
+    }
+  })();
+
   const handleResultClick = (type, id) => {
     setShowResults(false);
     setSearchQuery('');
@@ -195,7 +206,7 @@ function Header() {
                   ))}
                 </div>
               )}
-              {!searching && !searchResults && searchQuery.length >= 2 && (
+              {!searching && searchQuery.length >= 2 && !hasAnyResults && (
                 <div className="search-empty">No results</div>
               )}
             </div>
