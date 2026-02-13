@@ -142,6 +142,11 @@ function Header() {
       <nav className="navbar">
         <div className="logo">
           <Link to="/">
+            <img
+              className="logo-mark"
+              src="/GDG-Sticker-Brackets.gif"
+              alt="GDG NEHU logo"
+            />
             <span className="brand-full">Google Developer's Group, NEHU</span>
             <span className="brand-short">GDG NEHU</span>
           </Link>
@@ -318,4 +323,3 @@ function Header() {
 }
 
 export default Header;
-

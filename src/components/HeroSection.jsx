@@ -20,7 +20,7 @@ function HeroSection() {
       <div className="hero-wrap">
         <div className="hero-content">
           <p className="hero-eyebrow">
-            <span className="brand-full">Google Developer's Group, NEHU</span>
+            <span className="brand-full">Google Developer's Group, North Eastern Hill University</span>
             <span className="brand-short">GDG NEHU</span>
           </p>
           <h1 className="hero-headline">Engineering the Future, Together.</h1>
