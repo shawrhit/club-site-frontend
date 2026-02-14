@@ -1,0 +1,97 @@
+.ck-content {
+  width: 100%;
+}
+
+.ck-content h2,
+.ck-content h3 {
+  margin-top: 2rem;
+}
+
+.ck-content figure.table {
+  width: 100%;
+  margin: 1.25rem 0;
+  overflow-x: auto;
+}
+
+.ck-content figure.table table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 560px;
+}
+
+.ck-content figure.table th,
+.ck-content figure.table td {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  padding: 0.7rem 0.85rem;
+  text-align: left;
+}
+
+.ck-content .raw-html-embed {
+  display: flex;
+  justify-content: center;
+  margin: 1.1rem 0;
+}
+
+.ck-content .raw-html-embed img {
+  max-width: 100%;
+  height: auto;
+}
+
+.ck-content figure.media {
+  margin: 1.25rem 0;
+}
+
+.ck-content figure.media .ck-media-embed {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+}
+
+.ck-content figure.media .ck-media-embed iframe,
+.ck-content .ck-media-embed iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: 12px;
+}
+
+.ck-content pre {
+  position: relative !important;
+  background: #1f232b !important;
+  color: #eaf1ff !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  border-radius: 10px;
+  padding: 1rem !important;
+  overflow-x: auto;
+}
+
+.ck-content pre code {
+  color: #eaf1ff !important;
+}
+
+body[data-theme="dark"] .ck-content figure.table th,
+body[data-theme="dark"] .ck-content figure.table td {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+@media (max-width: 720px) {
+  .ck-content figure.table {
+    margin: 1rem 0;
+  }
+
+  .ck-content figure.table table {
+    min-width: 420px;
+    font-size: 0.92rem;
+  }
+
+  .ck-content figure.table th,
+  .ck-content figure.table td {
+    padding: 0.5rem 0.62rem;
+  }
+
+  .ck-content pre {
+    padding: 0.85rem !important;
+    font-size: 0.88rem !important;
+    border-radius: 8px;
+  }
+}

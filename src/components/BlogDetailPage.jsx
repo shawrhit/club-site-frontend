@@ -3,6 +3,8 @@ import { useParams, Link } from 'react-router-dom';
 import DOMPurify from 'dompurify';
 import GlassCard from '../components/GlassCard';
 import { apiFetch } from '../api';
+import { processContent } from '../utils/contentProcessor';
+import '../styles/CKEditorContent.css';
 
 function BlogDetailPage() {
   const { postId } = useParams();
@@ -57,7 +59,11 @@ function BlogDetailPage() {
     );
   }
 
-  const sanitizedContent = DOMPurify.sanitize(post.content || '<p>No content yet.</p>');
+  const processedContent = processContent(post.content || '<p>No content yet.</p>');
+  const sanitizedContent = DOMPurify.sanitize(processedContent, {
+    ADD_TAGS: ['iframe'],
+    ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'loading', 'referrerpolicy'],
+  });
   const formattedDate = post.published_date
     ? new Date(post.published_date).toLocaleDateString('en-US', {
         year: 'numeric',
@@ -108,7 +114,7 @@ function BlogDetailPage() {
       <div className="page-container">
         <div className="blog-post-container">
           <div
-            className="blog-post-content"
+            className="blog-post-content ck-content"
             dangerouslySetInnerHTML={{ __html: sanitizedContent }}
           />
 

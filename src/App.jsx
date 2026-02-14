@@ -15,6 +15,7 @@ import TeamMemberPage from './pages/TeamMemberPage';
 import TagPage from './pages/TagPage';
 import Footer from './components/Footer';
 import DevPage from './pages/DevPage';
+import NotFoundPage from './pages/NotFoundPage';
 
 function ScrollRestorationHandler() {
   const location = useLocation();
@@ -70,6 +71,7 @@ function App() {
         <Route path="/team" element={<TeamPage />} />
         <Route path="/team/:memberId" element={<TeamMemberPage />} />
         <Route path="/dev" element={<DevPage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <Footer />
     </>

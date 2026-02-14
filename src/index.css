@@ -2647,7 +2647,7 @@ body[data-theme="dark"] .pill {
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16);
   }
 
-  body[data-theme="dark"] .mobile-fab-trigger,
+body[data-theme="dark"] .mobile-fab-trigger,
   body[data-theme="dark"] .mobile-fab-links a {
     background: rgba(21, 29, 44, 0.9);
     color: var(--text-color);
@@ -2655,4 +2655,26 @@ body[data-theme="dark"] .pill {
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
   }
+}
+
+.not-found-page {
+  min-height: calc(100vh - var(--header-height, 64px));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: calc(var(--header-height, 64px) + 1rem) 1rem 2rem;
+  text-align: center;
+}
+
+.not-found-gif {
+  width: min(460px, 92vw);
+  height: auto;
+  border-radius: 14px;
+}
+
+.not-found-text {
+  color: var(--muted-text);
+  font-size: 1rem;
 }
