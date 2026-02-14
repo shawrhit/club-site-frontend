@@ -2,14 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Section from './Section';
 import GlassCard from './GlassCard';
-
-const API_BASE_URL = 'http://127.0.0.1:8000';
+import { apiFetch } from '../api';
 
 function BlogSection() {
   const [blogPosts, setBlogPosts] = useState([]);
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/blog/`)
+    apiFetch('/api/blog/')
       .then(response => response.json())
       .then(data => setBlogPosts(data))
       .catch(error => console.error('Error fetching blog posts:', error));
@@ -26,11 +25,11 @@ function BlogSection() {
         {blogPosts.slice(0, 3).map((post, index) => (
           <Link to={`/blog/${post.id}`} key={post.id} className="card-link">
             <GlassCard
-              imgSrc={post.image}
+              imgSrc={post.image_url}
               title={post.title}
               description={post.summary}
-              tags={post.tags.map(tag => tag.name)}
-              date={post.publish_date}
+              tags={(post.tags || []).map(tag => tag.name)}
+              date={post.published_date}
               className={`card-variant-${(index % 4) + 1}`}
             />
           </Link>

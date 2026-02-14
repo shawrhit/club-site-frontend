@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import DOMPurify from 'dompurify';
-
-const API_BASE_URL = 'http://127.0.0.1:8000';
+import { apiFetch } from '../api';
 
 function ProjectDetailPage() {
   const { projectId } = useParams();
@@ -15,7 +14,7 @@ function ProjectDetailPage() {
     setIsLoading(true);
     setErrorMessage('');
 
-    fetch(`${API_BASE_URL}/api/projects/${projectId}/`)
+    apiFetch(`/api/projects/${projectId}/`)
       .then((response) => (response.ok ? response.json() : Promise.reject(new Error('Request failed'))))
       .then((data) => {
         setProject(data);
@@ -64,8 +63,8 @@ function ProjectDetailPage() {
       <section className="blog-hero blog-hero-detail hero-blue">
         <div className="blog-hero-inner">
           <div className="blog-hero-media">
-            {project.image ? (
-              <img src={project.image} alt={project.title} />
+            {project.image_url ? (
+              <img src={project.image_url} alt={project.title} />
             ) : (
               <div className="blog-hero-placeholder" aria-hidden="true" />
             )}

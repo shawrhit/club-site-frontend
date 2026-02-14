@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import DOMPurify from 'dompurify';
-
-const API_BASE_URL = 'http://127.0.0.1:8000';
+import { apiFetch } from '../api';
 
 function TeamMemberPage() {
   const { memberId } = useParams();
@@ -15,7 +14,7 @@ function TeamMemberPage() {
     setIsLoading(true);
     setErrorMessage('');
 
-    fetch(`${API_BASE_URL}/api/team/${memberId}/`)
+    apiFetch(`/api/team/${memberId}/`)
       .then((response) => (response.ok ? response.json() : Promise.reject(new Error('Request failed'))))
       .then((data) => {
         setMember(data);
@@ -146,8 +145,8 @@ function TeamMemberPage() {
       <section className="blog-hero blog-hero-detail">
         <div className="blog-hero-inner">
           <div className="blog-hero-media">
-            {member.photo ? (
-              <img src={member.photo} alt={member.name} />
+            {member.photo_url ? (
+              <img src={member.photo_url} alt={member.name} />
             ) : (
               <div className="blog-hero-placeholder" aria-hidden="true" />
             )}

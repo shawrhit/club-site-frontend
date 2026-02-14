@@ -1,11 +1,28 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 function HeroSection() {
+  const [pillText, setPillText] = useState("Weekly Blogs");
+  
+  useEffect(() => {
+    const texts = ["Weekly Blogs", "Open Source", "Projects", "Roadmaps", "Events"];
+    let currentIndex = 0;
+    
+    const interval = setInterval(() => {
+      currentIndex = (currentIndex + 1) % texts.length;
+      setPillText(texts[currentIndex]);
+    }, 2000);
+    
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <section className="hero-section">
       <div className="hero-wrap">
         <div className="hero-content">
-          <p className="hero-eyebrow">Google Developer's Group, NEHU</p>
+          <p className="hero-eyebrow">
+            <span className="brand-full">Google Developer's Group, North Eastern Hill University</span>
+            <span className="brand-short">GDG NEHU</span>
+          </p>
           <h1 className="hero-headline">Engineering the Future, Together.</h1>
           <p className="hero-subheadline">
             Welcome to the hub for electronics and robotics enthusiasts. We build, we learn, and we redefine what's possible.
@@ -20,7 +37,7 @@ function HeroSection() {
           <div className="hero-blob blob-pink"></div>
           <div className="hero-blob blob-yellow"></div>
           <div className="hero-pill">Join our community</div>
-          <div className="hero-pill alt">Weekly builds</div>
+          <div key={pillText} className="hero-pill alt animate-pop-in">{pillText}</div>
         </div>
       </div>
     </section>

@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import DOMPurify from 'dompurify';
 import GlassCard from '../components/GlassCard';
-
-const API_BASE_URL = 'http://127.0.0.1:8000';
+import { apiFetch } from '../api';
 
 function BlogDetailPage() {
   const { postId } = useParams();
@@ -16,7 +15,7 @@ function BlogDetailPage() {
     setIsLoading(true);
     setErrorMessage('');
 
-    fetch(`${API_BASE_URL}/api/blog/${postId}/`)
+    apiFetch(`/api/blog/${postId}/`)
       .then(response => (response.ok ? response.json() : Promise.reject(new Error('Request failed'))))
       .then(data => {
         setPost(data);
@@ -75,8 +74,8 @@ function BlogDetailPage() {
       <section className="blog-hero blog-hero-detail hero-yellow">
         <div className="blog-hero-inner">
           <div className="blog-hero-media">
-            {post.image ? (
-              <img src={post.image} alt={post.title} />
+            {post.image_url ? (
+              <img src={post.image_url} alt={post.title} />
             ) : (
               <div className="blog-hero-placeholder" aria-hidden="true" />
             )}
@@ -115,8 +114,8 @@ function BlogDetailPage() {
 
           {post.author && (
             <div className="author-box">
-              {post.author.photo ? (
-                <img src={post.author.photo} alt={post.author.name} className="author-photo" />
+              {post.author.photo_url ? (
+                <img src={post.author.photo_url} alt={post.author.name} className="author-photo" />
               ) : (
                 <div className="author-photo author-photo-placeholder" aria-hidden="true" />
               )}
@@ -140,10 +139,10 @@ function BlogDetailPage() {
                 {relatedPosts.map((relatedPost) => (
                   <Link to={`/blog/${relatedPost.id}`} key={relatedPost.id} className="card-link">
                     <GlassCard
-                      imgSrc={relatedPost.image}
+                      imgSrc={relatedPost.image_url}
                       title={relatedPost.title}
                       description={relatedPost.summary}
-                      date={relatedPost.publish_date}
+                      date={relatedPost.published_date}
                       tags={[]}
                     />
                   </Link>

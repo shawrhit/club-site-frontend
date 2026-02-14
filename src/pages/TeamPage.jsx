@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
-const API_BASE_URL = 'http://127.0.0.1:8000';
+import { apiFetch } from '../api';
 
 function TeamPage() {
   const [teamMembers, setTeamMembers] = useState([]);
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/team/`)
+    apiFetch('/api/team/')
       .then(response => response.json())
       .then(data => setTeamMembers(data))
       .catch(error => console.error('Error fetching team members:', error));
@@ -23,7 +22,7 @@ function TeamPage() {
       <div className="grid-layout team-grid">
         {teamMembers.map(member => (
           <Link to={`/team/${member.id}`} key={member.id} className="glass-card team-card card-link">
-            <img src={member.photo} alt={member.name} />
+            <img src={member.photo_url} alt={member.name} />
             <h3>{member.name}</h3>
             <p>{member.role}</p>
           </Link>
