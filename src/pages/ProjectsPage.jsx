@@ -15,7 +15,7 @@ function ProjectsPage() {
   }, []);
 
   return (
-    <main className="page-container">
+    <main className="page-container projects-page">
       <div className="page-header">
         <h1 className="page-title">Our Projects</h1>
         <p className="page-subtitle">A showcase of our members' passion, creativity, and technical skills.</p>

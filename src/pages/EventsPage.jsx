@@ -33,7 +33,7 @@ function EventsPage() {
   }, []);
 
   return (
-    <main className="page-container blog-page">
+    <main className="page-container blog-page events-page">
       <section className="blog-hero hero-green">
         <div className="blog-hero-inner">
           <div className="blog-hero-media">

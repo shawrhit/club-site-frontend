@@ -13,7 +13,7 @@ function RoadmapsPage() {
   }, []);
 
   return (
-    <main className="page-container">
+    <main className="page-container roadmaps-page">
        <div className="page-header">
         <h1 className="page-title">Learning Roadmaps</h1>
         <p className="page-subtitle">Your guide to mastering key domains in the world of electronics and software.</p>

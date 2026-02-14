@@ -4,6 +4,7 @@ import { apiFetch } from '../api';
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const mobileFabRef = useRef(null);
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem('theme') || 'light';
   });
@@ -21,6 +22,8 @@ function Header() {
     setTheme(prevTheme => (prevTheme === 'dark' ? 'light' : 'dark'));
   };
 
+  const isMobileViewport = () => window.matchMedia('(max-width: 768px)').matches;
+
   // Search state
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState(null);
@@ -31,32 +34,6 @@ function Header() {
   const navigate = useNavigate();
   const searchRef = useRef(null);
   const [showSearchInput, setShowSearchInput] = useState(false);
-
-  useEffect(() => {
-    const onDocClick = (e) => {
-      if (searchRef.current && !searchRef.current.contains(e.target)) {
-        setShowResults(false);
-      }
-    };
-
-    document.addEventListener('click', onDocClick);
-
-    return () => {
-      if (searchTimer.current) clearTimeout(searchTimer.current);
-      if (abortController.current) abortController.current.abort();
-      document.removeEventListener('click', onDocClick);
-    };
-  }, []);
-
-  useEffect(() => {
-    const onKey = (e) => {
-      if (e.key === 'Escape') {
-        setShowResults(false);
-      }
-    };
-    if (showResults) document.addEventListener('keydown', onKey);
-    return () => { document.removeEventListener('keydown', onKey); };
-  }, [showResults]);
 
   const closeSearch = () => {
     setShowResults(false);
@@ -69,11 +46,45 @@ function Header() {
     }
   };
 
+  useEffect(() => {
+    const onDocClick = (e) => {
+      if (mobileFabRef.current && !mobileFabRef.current.contains(e.target)) {
+        setIsMenuOpen(false);
+      }
+      if (searchRef.current && !searchRef.current.contains(e.target)) {
+        if (isMobileViewport() && showSearchInput) {
+          closeSearch();
+        } else {
+          setShowResults(false);
+        }
+      }
+    };
+
+    document.addEventListener('click', onDocClick);
+
+    return () => {
+      if (searchTimer.current) clearTimeout(searchTimer.current);
+      if (abortController.current) abortController.current.abort();
+      document.removeEventListener('click', onDocClick);
+    };
+  }, [showSearchInput]);
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === 'Escape') {
+        setShowResults(false);
+      }
+    };
+    if (showResults) document.addEventListener('keydown', onKey);
+    return () => { document.removeEventListener('keydown', onKey); };
+  }, [showResults]);
+
   const toggleSearchInput = () => {
     if (showSearchInput) {
       closeSearch();
       return;
     }
+    if (isMenuOpen) setIsMenuOpen(false);
     setShowSearchInput(true);
     setShowResults(!!searchResults);
     // focus the input after render
@@ -126,9 +137,8 @@ function Header() {
   })();
 
   const handleResultClick = (type, id) => {
-    setShowResults(false);
-    setSearchQuery('');
-    setSearchResults(null);
+    closeSearch();
+    setIsMenuOpen(false);
     // navigate to appropriate detail page
     if (type === 'blogs') navigate(`/blog/${id}`);
     else if (type === 'projects') navigate(`/projects/${id}`);
@@ -138,8 +148,9 @@ function Header() {
   };
 
   return (
-    <header className="main-header" id="mainHeader">
-      <nav className="navbar">
+    <>
+      <header className="main-header" id="mainHeader">
+        <nav className={`navbar ${showSearchInput ? 'search-open-mobile' : ''}`}>
         <div className="logo">
           <Link to="/">
             <img
@@ -159,7 +170,7 @@ function Header() {
           <li><Link to="/roadmaps">Roadmaps</Link></li>
           <li><Link to="/team">Team</Link></li>
         </ul>
-        
+
         <div className={`nav-actions ${showSearchInput ? 'nav-actions--hide-controls' : ''}`}>
           <div className="header-search" ref={searchRef}>
             <button type="button" className="search-toggle" onClick={toggleSearchInput} aria-label="Open search">
@@ -175,11 +186,21 @@ function Header() {
               value={searchQuery}
               onChange={onSearchChange}
               onFocus={() => { if (searchResults) setShowResults(true); setShowSearchInput(true); }}
+              onBlur={() => {
+                if (isMobileViewport()) {
+                  setTimeout(() => {
+                    if (searchRef.current) {
+                      const input = searchRef.current.querySelector('input');
+                      if (document.activeElement !== input) closeSearch();
+                    }
+                  }, 120);
+                }
+              }}
               aria-label="Search site"
             />
-            <button type="button" className="search-close" onClick={closeSearch} aria-label="Close search">×</button>
+            <button type="button" className="search-close" onClick={closeSearch} aria-label="Close search">&times;</button>
             <div className={`search-results ${showResults ? 'visible' : ''}`} role="listbox">
-              {searching && <div className="search-loading">Searching…</div>}
+              {searching && <div className="search-loading">Searching...</div>}
               {!searching && searchResults && (
                 <div>
                   {['blogs','projects','events','team','roadmaps'].map((section) => (
@@ -260,65 +281,35 @@ function Header() {
           <Link to="/join" className="cta-button">Join Us</Link>
         </div>
 
-        <button
-          className="hamburger-menu"
-          onClick={toggleMenu}
-          aria-label="Toggle navigation menu"
-        >
-          <span className={`bar ${isMenuOpen ? 'open' : ''}`}></span>
-          <span className={`bar ${isMenuOpen ? 'open' : ''}`}></span>
-          <span className={`bar ${isMenuOpen ? 'open' : ''}`}></span>
-        </button>
-      </nav>
+        <Link to="/join" className="mobile-join-button">Join Us</Link>
+        </nav>
+      </header>
 
-      <div className={`mobile-nav ${isMenuOpen ? 'open' : ''}`}>
-        <Link to="/projects" onClick={toggleMenu}>Projects</Link>
-        <Link to="/blog" onClick={toggleMenu}>Blog</Link>
-        <Link to="/events" onClick={toggleMenu}>Events</Link>
-        <Link to="/roadmaps" onClick={toggleMenu}>Roadmaps</Link>
-        <Link to="/team" onClick={toggleMenu}>Team</Link>
+      <div
+        ref={mobileFabRef}
+        className={`mobile-fab-menu ${isMenuOpen ? 'open' : ''} ${showSearchInput ? 'hidden' : ''}`}
+      >
         <button
           type="button"
-          className="theme-toggle mobile"
-          onClick={toggleTheme}
-          aria-pressed={theme === 'dark'}
-          aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          className="mobile-fab-trigger"
+          onClick={toggleMenu}
+          aria-label="Open quick navigation"
+          aria-expanded={isMenuOpen}
         >
-          <span className="theme-icon theme-icon-moon" aria-hidden="true">
-            <svg
-              viewBox="0 0 24 24"
-              role="presentation"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.6"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              style={{ fill: 'none', stroke: 'currentColor' }}
-            >
-              <path d="M21 14.2A8.5 8.5 0 1 1 9.8 3a7 7 0 0 0 11.2 11.2Z" />
-            </svg>
-          </span>
-          <span className="theme-icon theme-icon-sun" aria-hidden="true">
-            <svg
-              viewBox="0 0 24 24"
-              role="presentation"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.6"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              style={{ fill: 'none', stroke: 'currentColor' }}
-            >
-              <circle cx="12" cy="12" r="4.5" />
-              <path d="M12 2.5v2.5M12 19v2.5M2.5 12h2.5M19 12h2.5M5 5l1.8 1.8M17.2 17.2l1.8 1.8M19 5l-1.8 1.8M6.8 17.2l-1.8 1.8" />
-            </svg>
-          </span>
-          <span className="sr-only">
-            {theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          <span className={`fab-icon ${isMenuOpen ? 'open' : ''}`} aria-hidden="true">
+            <span className="fab-line fab-line-h"></span>
+            <span className="fab-line fab-line-v"></span>
           </span>
         </button>
+        <div className="mobile-fab-links">
+          <Link to="/projects" onClick={toggleMenu}>Projects</Link>
+          <Link to="/blog" onClick={toggleMenu}>Blog</Link>
+          <Link to="/events" onClick={toggleMenu}>Events</Link>
+          <Link to="/roadmaps" onClick={toggleMenu}>Roadmaps</Link>
+          <Link to="/team" onClick={toggleMenu}>Team</Link>
+        </div>
       </div>
-    </header>
+    </>
   );
 }
 

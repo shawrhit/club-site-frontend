@@ -20,12 +20,12 @@ function HeroSection() {
       <div className="hero-wrap">
         <div className="hero-content">
           <p className="hero-eyebrow">
-            <span className="brand-full">Google Developer's Group, North Eastern Hill University</span>
-            <span className="brand-short">GDG NEHU</span>
+            <span className="brand-full">Google Developer's Group On Campus, North Eastern Hill University</span>
+            <span className="brand-short">GDGoC NEHU</span>
           </p>
           <h1 className="hero-headline">Engineering the Future, Together.</h1>
           <p className="hero-subheadline">
-            Welcome to the hub for electronics and robotics enthusiasts. We build, we learn, and we redefine what's possible.
+            Learn. Build. Collaborate. Grow Together as Developers.
           </p>
           <div className="hero-actions">
             <a href="#projects" className="hero-cta">Explore Projects</a>
