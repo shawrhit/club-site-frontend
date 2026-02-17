@@ -19,9 +19,9 @@ function RoadmapsSection({ roadmaps = [], loading = false }) {
             to={`/roadmaps/${roadmap.id}`}
             className={`glass-card roadmap-card card-variant-${(index % 4) + 1} card-link`}
           >
-            <div className="icon">{roadmap.icon_name}</div>
-            <h3>{roadmap.title}</h3>
-            <p>{roadmap.description}</p>
+            <div className="icon">{roadmap.icon_name || roadmap.icon || roadmap.emoji || '🧭'}</div>
+            <h3>{roadmap.title || roadmap.name}</h3>
+            <p>{roadmap.summary || roadmap.description}</p>
             <span className="cta-link">Start Learning -&gt;</span>
           </Link>
         ))}

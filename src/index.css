@@ -722,6 +722,20 @@ body[data-theme="dark"] .card-variant-4 { background: rgba(52, 168, 83, 0.24); }
 .explore-tags-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; max-width: 900px; margin: auto; }
 .explore-tag { background: #ffffff; border: 2px solid var(--border-color); color: var(--text-color); padding: 0.75rem 1.5rem; border-radius: 999px; font-size: 1rem; font-weight: 600; text-decoration: none; transition: transform 0.3s ease, background-color 0.3s ease; }
 .explore-tag:hover { background-color: var(--text-color); color: #ffffff; transform: translateY(-2px); }
+
+@media (max-width: 768px) {
+  .explore-tags-container {
+    gap: 0.65rem;
+    justify-content: center;
+  }
+
+  .explore-tag {
+    max-width: 100%;
+    padding: 0.55rem 0.95rem;
+    font-size: 0.9rem;
+    overflow-wrap: anywhere;
+  }
+}
 .card-date {
   font-size: 0.8rem;
   font-weight: 500;

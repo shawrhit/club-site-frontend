@@ -49,7 +49,7 @@ function HomePage() {
       <EventsSection events={landingData.events} loading={loading} />
       <RoadmapsSection roadmaps={landingData.roadmaps} loading={loading} />
       <TeamSection teamMembers={landingData.team} loading={loading} />
-      <TagsSection tags={landingData.tagsPopular} loading={loading} error={error} />
+      <TagsSection tags={landingData.tags} loading={loading} error={error} />
     </main>
   );
 }

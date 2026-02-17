@@ -19,9 +19,9 @@ function TeamSection({ teamMembers = [], loading = false }) {
             to={`/team/${member.id}`}
             className={`glass-card team-card card-variant-${(index % 4) + 1} card-link`}
           >
-            <img src={member.photo_url} alt={member.name} />
-            <h3>{member.name}</h3>
-            <p>{member.role}</p>
+            <img src={member.photo_url || member.image_url} alt={member.name || member.title || 'Team member'} />
+            <h3>{member.name || member.title}</h3>
+            <p>{member.role || member.summary || member.description}</p>
           </Link>
         ))}
         {!showTeamMembers.length && loading && <div className="muted">Loading team...</div>}

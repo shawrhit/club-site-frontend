@@ -16,11 +16,11 @@ function TagsSection({ tags = [], loading = false, error = null }) {
       <div className="explore-tags-container">
         {loading && !showTags.length && <div className="muted">Loading topics...</div>}
         {showTags.map((tag) => {
-          const name = tag.name || tag.title || tag;
+          const name = tag.name || tag.title || tag.label || tag.slug || String(tag);
           const slug = tag.slug || (typeof tag === 'string' ? tag.toLowerCase().replace(/\s+/g, '-') : undefined);
           return slug ? (
             <Link key={slug} to={`/tags/${encodeURIComponent(slug)}`} className="explore-tag">
-              {name}{tag.count ? ` - ${tag.count}` : ''}
+              {name}
             </Link>
           ) : (
             <span key={name} className="explore-tag">{name}</span>

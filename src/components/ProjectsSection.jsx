@@ -18,11 +18,11 @@ function ProjectsSection({ projects = [], loading = false }) {
         {showProjects.map((project, index) => (
           <Link to={`/projects/${project.id}`} key={project.id} className="card-link">
             <GlassCard
-              imgSrc={project.image_url}
-              title={project.title}
-              description={project.description}
+              imgSrc={project.image_url || project.photo_url}
+              title={project.title || project.name}
+              description={project.summary || project.description}
               tags={(project.tags || []).map(getTagName).filter(Boolean)}
-              date={project.published_date}
+              date={project.published_date || project.event_date}
               className={`card-variant-${(index % 4) + 1}`}
             />
           </Link>

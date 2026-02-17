@@ -17,8 +17,8 @@ describe('HomePage landing data integration', () => {
   it('loads and renders sections from bootstrap loader data', async () => {
     loadLandingData.mockResolvedValueOnce({
       source: 'bootstrap',
-      tags: [],
-      tagsPopular: [{ id: 1, name: 'AI', slug: 'ai' }],
+      tags: [{ id: 1, name: 'AI', slug: 'ai' }],
+      tagsPopular: [],
       blogs: [{ id: 101, title: 'Blog Test', summary: 'Summary' }],
       projects: [{ id: 201, title: 'Project Test', description: 'Desc' }],
       events: [{ id: 301, title: 'Event Test', summary: 'Event summary' }],
