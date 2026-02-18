@@ -20,7 +20,7 @@ function EventsPage() {
   const getTagName = (tag) => (typeof tag === 'string' ? tag : tag?.name);
 
   useEffect(() => {
-    apiFetch('/api/events/')
+    apiFetch('/api/program/')
       .then((response) => response.json())
       .then((data) => {
         // Sort newest first so the hero reflects the latest event.

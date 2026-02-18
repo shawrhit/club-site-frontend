@@ -65,7 +65,7 @@ function EventDetailPage() {
     setIsLoading(true);
     setErrorMessage('');
 
-    apiFetch(`/api/events/${eventId}/`)
+    apiFetch(`/api/program/${eventId}/`)
       .then((response) => (response.ok ? response.json() : Promise.reject(new Error('Request failed'))))
       .then((data) => {
         setEvent(data);

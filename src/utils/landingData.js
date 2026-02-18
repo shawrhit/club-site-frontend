@@ -78,7 +78,7 @@ export const loadLegacyLandingData = async ({ signal } = {}) => {
   const [tagsRaw, tagsPopularRaw, events, projects, blogs, roadmaps, team] = await Promise.all([
     fetchOptionalJson('/api/tags/', signal),
     fetchOptionalJson('/api/tags/popular/', signal),
-    fetchOptionalJson('/api/events/', signal),
+    fetchOptionalJson('/api/program/', signal),
     fetchOptionalJson('/api/projects/', signal),
     fetchOptionalJson('/api/blog/', signal),
     fetchOptionalJson('/api/roadmaps/', signal),
@@ -111,7 +111,7 @@ export const loadLegacyLandingData = async ({ signal } = {}) => {
 export const loadLandingData = async ({ signal } = {}) => {
   if (USE_BOOTSTRAP_ENDPOINT) {
     try {
-      const payload = await fetchJson('/api/bootstrap/', signal);
+      const payload = await fetchJson('/api/init/', signal);
       return mapBootstrapPayload(payload);
     } catch (error) {
       return loadLegacyLandingData({ signal });

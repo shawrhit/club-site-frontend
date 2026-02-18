@@ -55,7 +55,7 @@ describe('landingData loader', () => {
     await loadLandingData();
 
     expect(apiFetch).toHaveBeenCalledTimes(1);
-    expect(apiFetch).toHaveBeenCalledWith('/api/bootstrap/', expect.any(Object));
+    expect(apiFetch).toHaveBeenCalledWith('/api/init/', expect.any(Object));
   });
 
   it('falls back to legacy fanout when bootstrap fails', async () => {
