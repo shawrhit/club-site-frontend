@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Routes, Route, useLocation, useNavigationType } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import Header from './components/Header';
 import BlogDetailPage from './components/BlogDetailPage';
 import HomePage from './pages/HomePage';
@@ -59,42 +60,44 @@ function App() {
   }, []);
 
   return (
-    <>
-      <ScrollRestorationHandler />
-      <div className="background-container">
-        <div className="background-gradient"></div>
-      </div>
-      <Header />
-      {isGlobalLoading && (
-        <div className="global-loading-overlay" role="status" aria-live="polite" aria-label="Loading content">
-          <img
-            src="/GDG-Sticker-Brackets.gif"
-            alt="GDG loading"
-            className="global-loading-gif"
-          />
-          <p className="global-loading-text">Loading..</p>
+    <HelmetProvider>
+      <>
+        <ScrollRestorationHandler />
+        <div className="background-container">
+          <div className="background-gradient"></div>
         </div>
-      )}
+        <Header />
+        {isGlobalLoading && (
+          <div className="global-loading-overlay" role="status" aria-live="polite" aria-label="Loading content">
+            <img
+              src="/GDG-Sticker-Brackets.gif"
+              alt="GDG loading"
+              className="global-loading-gif"
+            />
+            <p className="global-loading-text">Loading..</p>
+          </div>
+        )}
 
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/blog" element={<BlogPage />} />
-        <Route path="/blog/:postId" element={<BlogDetailPage />} />
-        <Route path="/events" element={<EventsPage />} />
-        <Route path="/events/:eventId" element={<EventDetailPage />} />
-        <Route path="/projects" element={<ProjectsPage />} />
-        <Route path="/projects/:projectId" element={<ProjectDetailPage />} />
-        <Route path="/roadmaps" element={<RoadmapsPage />} />
-        <Route path="/roadmaps/:roadmapId" element={<RoadmapDetailPage />} />
-        <Route path="/tags/:slug" element={<TagPage />} />
-        <Route path="/team" element={<TeamPage />} />
-        <Route path="/team/:memberId" element={<TeamMemberPage />} />
-        <Route path="/join" element={<JoinPage />} />
-        <Route path="/dev" element={<DevPage />} />
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
-      <Footer />
-    </>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/blog" element={<BlogPage />} />
+          <Route path="/blog/:postId" element={<BlogDetailPage />} />
+          <Route path="/events" element={<EventsPage />} />
+          <Route path="/events/:eventId" element={<EventDetailPage />} />
+          <Route path="/projects" element={<ProjectsPage />} />
+          <Route path="/projects/:projectId" element={<ProjectDetailPage />} />
+          <Route path="/roadmaps" element={<RoadmapsPage />} />
+          <Route path="/roadmaps/:roadmapId" element={<RoadmapDetailPage />} />
+          <Route path="/tags/:slug" element={<TagPage />} />
+          <Route path="/team" element={<TeamPage />} />
+          <Route path="/team/:memberId" element={<TeamMemberPage />} />
+          <Route path="/join" element={<JoinPage />} />
+          <Route path="/dev" element={<DevPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+        <Footer />
+      </>
+    </HelmetProvider>
   );
 }
 

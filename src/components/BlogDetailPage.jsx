@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import DOMPurify from 'dompurify';
 import GlassCard from '../components/GlassCard';
 import { apiFetch } from '../api';
@@ -74,9 +75,21 @@ function BlogDetailPage() {
   const tagList = (post.tags || []).map(tag => (typeof tag === 'string' ? tag : tag.name)).filter(Boolean);
   const relatedPosts = post.related_posts || [];
   const summaryText = post.summary || '';
+  const pageTitle = `${post.title || 'Blog'} | GDGOC NEHU`;
+  const pageDescription = post.short_description || post.summary || 'Read more on GDGOC NEHU';
+  const pageImage = post.banner_image || post.image_url || post.image || 'https://gdgnehu.pages.dev/og-default.png';
+  const pageUrl =
+    typeof window !== 'undefined' ? window.location.href : `https://gdgnehu.pages.dev/blog/${postId}`;
 
   return (
     <main className="blog-detail-page">
+      <Helmet>
+        <title>{pageTitle}</title>
+        <meta property="og:title" content={post.title || 'GDGOC NEHU'} />
+        <meta property="og:description" content={pageDescription} />
+        <meta property="og:image" content={pageImage} />
+        <meta property="og:url" content={pageUrl} />
+      </Helmet>
       <section className="blog-hero blog-hero-detail hero-yellow">
         <div className="blog-hero-inner">
           <div className="blog-hero-media">

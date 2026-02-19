@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import DOMPurify from 'dompurify';
 import { apiFetch } from '../api';
 import { processContent } from '../utils/contentProcessor';
@@ -63,9 +64,22 @@ function ProjectDetailPage() {
       })
     : '';
   const tagList = (project.tags || []).map((tag) => (typeof tag === 'string' ? tag : tag.name)).filter(Boolean);
+  const pageTitle = `${project.title || 'Project'} | GDGOC NEHU`;
+  const pageDescription = project.short_description || project.summary || project.description || 'Read more on GDGOC NEHU';
+  const pageImage =
+    project.banner_image || project.image_url || project.image || 'https://gdgnehu.pages.dev/og-default.png';
+  const pageUrl =
+    typeof window !== 'undefined' ? window.location.href : `https://gdgnehu.pages.dev/projects/${projectId}`;
 
   return (
     <main className="blog-detail-page">
+      <Helmet>
+        <title>{pageTitle}</title>
+        <meta property="og:title" content={project.title || 'GDGOC NEHU'} />
+        <meta property="og:description" content={pageDescription} />
+        <meta property="og:image" content={pageImage} />
+        <meta property="og:url" content={pageUrl} />
+      </Helmet>
       <section className="blog-hero blog-hero-detail hero-blue">
         <div className="blog-hero-inner">
           <div className="blog-hero-media">

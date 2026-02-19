@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import DOMPurify from 'dompurify';
 import { ExternalLink } from 'lucide-react';
 import { apiFetch } from '../api';
@@ -112,6 +113,11 @@ function EventDetailPage() {
   const resources = Array.isArray(event?.resources)
     ? event.resources.filter((item) => item && item.label && item.url)
     : [];
+  const pageTitle = `${event?.title || 'Event'} | GDGOC NEHU`;
+  const pageDescription = event?.short_description || event?.summary || 'Read more on GDGOC NEHU';
+  const pageImage = event?.banner_image || event?.image_url || event?.image || 'https://gdgnehu.pages.dev/og-default.png';
+  const pageUrl =
+    typeof window !== 'undefined' ? window.location.href : `https://gdgnehu.pages.dev/events/${eventId}`;
 
   const isArchived = (() => {
     if (!eventDate) return false;
@@ -200,6 +206,13 @@ function EventDetailPage() {
 
   return (
     <main className="blog-detail-page">
+      <Helmet>
+        <title>{pageTitle}</title>
+        <meta property="og:title" content={event?.title || 'GDGOC NEHU'} />
+        <meta property="og:description" content={pageDescription} />
+        <meta property="og:image" content={pageImage} />
+        <meta property="og:url" content={pageUrl} />
+      </Helmet>
       <section className="blog-hero blog-hero-detail hero-green">
         <div className="blog-hero-inner">
           <div className="blog-hero-media">

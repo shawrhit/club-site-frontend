@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import DOMPurify from 'dompurify';
 import { apiFetch } from '../api';
 import { processContent } from '../utils/contentProcessor';
@@ -144,8 +145,23 @@ function RoadmapDetailPage() {
     );
   }
 
+  const pageTitle = `${roadmap.title || 'Roadmap'} | GDGOC NEHU`;
+  const pageDescription =
+    roadmap.short_description || roadmap.summary || roadmap.description || 'Read more on GDGOC NEHU';
+  const pageImage =
+    roadmap.banner_image || roadmap.image_url || roadmap.image || 'https://gdgnehu.pages.dev/og-default.png';
+  const pageUrl =
+    typeof window !== 'undefined' ? window.location.href : `https://gdgnehu.pages.dev/roadmaps/${roadmapId}`;
+
   return (
     <main className="blog-detail-page roadmap-map">
+      <Helmet>
+        <title>{pageTitle}</title>
+        <meta property="og:title" content={roadmap.title || 'GDGOC NEHU'} />
+        <meta property="og:description" content={pageDescription} />
+        <meta property="og:image" content={pageImage} />
+        <meta property="og:url" content={pageUrl} />
+      </Helmet>
       <div className="roadmap-map-shell">
         <span className="roadmap-hero-line" aria-hidden="true" />
           <svg className="roadmap-connector" aria-hidden="true">
