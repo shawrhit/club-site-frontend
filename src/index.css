@@ -1176,6 +1176,23 @@ body[data-theme="dark"] .hero-cta:hover {
   color: #c6d6ff;
 }
 
+.launchpad-actions {
+  grid-area: back;
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.launchpad-share {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
 .launchpad-rail {
   grid-area: rail;
   width: 2px;
@@ -1596,6 +1613,33 @@ body[data-theme="dark"] .hero-cta:hover {
   text-decoration: none;
   border-bottom: 2px solid #101010;
   color: #101010;
+}
+
+.blog-hero-share {
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.share-inline-icon {
+  width: 1rem;
+  height: 1rem;
+  display: inline-flex;
+}
+
+.share-inline-icon svg {
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .blog-hero-link:visited {
@@ -2114,8 +2158,50 @@ body[data-theme="dark"] .member-social-icon {
 .related-posts-title {
   font-size: 2rem;
   font-weight: 700;
-  text-align: center;
-  margin-bottom: 3rem;
+  text-align: left;
+  margin-bottom: 0.4rem;
+}
+
+.related-posts-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.6rem;
+}
+
+.related-posts-subtitle {
+  color: var(--muted-text);
+  font-size: 0.95rem;
+}
+
+.related-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.32rem;
+  font-weight: 700;
+  border-bottom: 2px solid currentColor;
+  padding-bottom: 0.1rem;
+}
+
+.related-grid {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.related-grid .glass-card img {
+  height: 168px;
+}
+
+.related-grid .card-content {
+  padding: 1rem 1.2rem 1.35rem;
+}
+
+@media (max-width: 680px) {
+  .related-posts-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
 /* Make the GlassCard links have no underline */
@@ -2487,6 +2573,7 @@ body[data-theme="dark"] .roadmaps-page .grid-layout > .glass-card.card-link:nth-
   grid-template-columns: repeat(auto-fit, minmax(250px, 320px));
   gap: 1rem;
   align-items: start;
+  justify-content: center;
 }
 
 .event-speaker-card {
@@ -2502,6 +2589,7 @@ body[data-theme="dark"] .roadmaps-page .grid-layout > .glass-card.card-link:nth-
   flex-direction: column;
   align-items: center;
   text-align: center;
+  margin-inline: auto;
 }
 
 .event-speaker-head {

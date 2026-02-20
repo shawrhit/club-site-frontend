@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Section from './Section';
 
 function RoadmapsSection({ roadmaps = [], loading = false }) {
-  const showRoadmaps = roadmaps.slice(0, 3);
+  const showRoadmaps = roadmaps.slice(0, 2);
 
   return (
     <Section

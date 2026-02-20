@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import DOMPurify from 'dompurify';
 import { ExternalLink } from 'lucide-react';
+import GlassCard from '../components/GlassCard';
 import { apiFetch } from '../api';
 import { processContent } from '../utils/contentProcessor';
 import '../styles/CKEditorContent.css';
@@ -58,6 +59,7 @@ function IconBadge({ kind }) {
 function EventDetailPage() {
   const { eventId } = useParams();
   const [event, setEvent] = useState(null);
+  const [moreEvents, setMoreEvents] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -75,6 +77,19 @@ function EventDetailPage() {
       .catch(() => {
         setErrorMessage('Unable to load this event right now.');
         setIsLoading(false);
+      });
+  }, [eventId]);
+
+  useEffect(() => {
+    apiFetch('/api/program/')
+      .then((response) => (response.ok ? response.json() : Promise.reject(new Error('Request failed'))))
+      .then((data) => {
+        const list = Array.isArray(data) ? data : [];
+        const filtered = list.filter((item) => String(item.id) !== String(eventId));
+        setMoreEvents(filtered.slice(0, 3));
+      })
+      .catch(() => {
+        setMoreEvents([]);
       });
   }, [eventId]);
 
@@ -118,6 +133,25 @@ function EventDetailPage() {
   const pageImage = event?.banner_image || event?.image_url || event?.image || 'https://gdgnehu.pages.dev/og-default.png';
   const pageUrl =
     typeof window !== 'undefined' ? window.location.href : `https://gdgnehu.pages.dev/events/${eventId}`;
+
+  const handleShare = async () => {
+    const shareData = {
+      title: event?.title || 'GDGOC NEHU Event',
+      text: event?.summary || 'Check this event from GDG On Campus | NEHU',
+      url: pageUrl,
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+        return;
+      }
+      await navigator.clipboard.writeText(pageUrl);
+      window.alert('Link copied to clipboard.');
+    } catch (_) {
+      // no-op
+    }
+  };
 
   const isArchived = (() => {
     if (!eventDate) return false;
@@ -195,9 +229,7 @@ function EventDetailPage() {
         <div className="blog-post-container">
           <p>{errorMessage || 'This event is unavailable.'}</p>
           <div className="back-link-container">
-            <Link to="/events" className="see-more-button">
-              &larr; All Events
-            </Link>
+            <Link to="/events" className="see-more-button">All Events</Link>
           </div>
         </div>
       </main>
@@ -236,6 +268,16 @@ function EventDetailPage() {
             <h1 className="blog-hero-title">{event.title}</h1>
             {event.summary && <p className="blog-hero-dek">{event.summary}</p>}
             <div className="blog-hero-actions">
+              <button type="button" className="blog-hero-link blog-hero-share" onClick={handleShare}>
+                <span className="share-inline-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M7 12v7a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-7" />
+                    <path d="M12 16V4" />
+                    <path d="m8.5 7.5 3.5-3.5 3.5 3.5" />
+                  </svg>
+                </span>
+                Share
+              </button>
               <Link to="/events" className="blog-hero-link">
                 Back to Events
               </Link>
@@ -416,6 +458,36 @@ function EventDetailPage() {
           )}
         </aside>
       </div>
+
+      {moreEvents.length > 0 && (
+        <div className="page-container">
+          <section className="related-posts-section">
+            <div className="related-posts-header">
+              <div>
+                <h2 className="related-posts-title">You may also like</h2>
+                <p className="related-posts-subtitle">More events from the community</p>
+              </div>
+            </div>
+            <div className="grid-layout related-grid">
+              {moreEvents.map((item, index) => (
+                <Link to={`/events/${item.id}`} key={item.id} className="card-link">
+                  <GlassCard
+                    imgSrc={item.image_url}
+                    title={item.title}
+                    description={item.summary}
+                    date={item.event_date}
+                    tags={(item.tags || []).map((tag) => (typeof tag === 'string' ? tag : tag?.name)).filter(Boolean)}
+                    className={`card-variant-${(index % 4) + 1}`}
+                  />
+                </Link>
+              ))}
+            </div>
+          </section>
+          <div className="back-link-container">
+            <Link to="/events" className="see-more-button">All Events</Link>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

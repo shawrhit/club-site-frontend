@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import DOMPurify from 'dompurify';
+import GlassCard from '../components/GlassCard';
 import { apiFetch } from '../api';
 import { processContent } from '../utils/contentProcessor';
 import '../styles/CKEditorContent.css';
@@ -9,6 +10,7 @@ import '../styles/CKEditorContent.css';
 function RoadmapDetailPage() {
   const { roadmapId } = useParams();
   const [roadmap, setRoadmap] = useState(null);
+  const [moreRoadmaps, setMoreRoadmaps] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
   const [tocItems, setTocItems] = useState([]);
@@ -32,6 +34,20 @@ function RoadmapDetailPage() {
       .catch(() => {
         setErrorMessage('Unable to load this roadmap right now.');
         setIsLoading(false);
+      });
+  }, [roadmapId]);
+
+  useEffect(() => {
+    apiFetch('/api/roadmaps/')
+      .then((response) => (response.ok ? response.json() : Promise.reject(new Error('Request failed'))))
+      .then((data) => {
+        const list = Array.isArray(data) ? data : [];
+        const filtered = list.filter((item) => String(item.id) !== String(roadmapId));
+        const shuffled = [...filtered].sort(() => Math.random() - 0.5);
+        setMoreRoadmaps(shuffled.slice(0, 3));
+      })
+      .catch(() => {
+        setMoreRoadmaps([]);
       });
   }, [roadmapId]);
   const contentHtml =
@@ -138,7 +154,7 @@ function RoadmapDetailPage() {
         <div className="blog-post-container">
           <p>{errorMessage || 'This roadmap is unavailable.'}</p>
           <div className="back-link-container">
-            <Link to="/roadmaps" className="see-more-button">&larr; All Roadmaps</Link>
+            <Link to="/roadmaps" className="see-more-button">All Roadmaps</Link>
           </div>
         </div>
       </main>
@@ -152,6 +168,25 @@ function RoadmapDetailPage() {
     roadmap.banner_image || roadmap.image_url || roadmap.image || 'https://gdgnehu.pages.dev/og-default.png';
   const pageUrl =
     typeof window !== 'undefined' ? window.location.href : `https://gdgnehu.pages.dev/roadmaps/${roadmapId}`;
+
+  const handleShare = async () => {
+    const shareData = {
+      title: roadmap.title || 'GDGOC NEHU Roadmap',
+      text: roadmap.description || 'Check this roadmap from GDG On Campus | NEHU',
+      url: pageUrl,
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+        return;
+      }
+      await navigator.clipboard.writeText(pageUrl);
+      window.alert('Link copied to clipboard.');
+    } catch (_) {
+      // no-op
+    }
+  };
 
   return (
     <main className="blog-detail-page roadmap-map">
@@ -175,7 +210,19 @@ function RoadmapDetailPage() {
             </svg>
         <section className="roadmap-launchpad">
           <div className="roadmap-launchpad-inner">
-            <Link to="/roadmaps" className="launchpad-back">&larr; Back to Roadmaps</Link>
+            <div className="launchpad-actions">
+              <Link to="/roadmaps" className="launchpad-back">&larr; Back to Roadmaps</Link>
+              <button type="button" className="launchpad-back launchpad-share" onClick={handleShare}>
+                <span className="share-inline-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M7 12v7a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-7" />
+                    <path d="M12 16V4" />
+                    <path d="m8.5 7.5 3.5-3.5 3.5 3.5" />
+                  </svg>
+                </span>
+                Share
+              </button>
+            </div>
             <div className="launchpad-rail" aria-hidden="true">
               <span className="launchpad-dot" />
             </div>
@@ -214,6 +261,32 @@ function RoadmapDetailPage() {
                 </ul>
               </aside>
             )}
+          </div>
+          {moreRoadmaps.length > 0 && (
+            <section className="related-posts-section">
+              <div className="related-posts-header">
+                <div>
+                  <h2 className="related-posts-title">You may also like</h2>
+                  <p className="related-posts-subtitle">Continue your learning journey</p>
+                </div>
+              </div>
+              <div className="grid-layout related-grid">
+                {moreRoadmaps.map((item, index) => (
+                  <Link to={`/roadmaps/${item.id}`} key={item.id} className="card-link">
+                    <GlassCard
+                      imgSrc={item.image_url}
+                      title={item.title || item.name}
+                      description={item.summary || item.description}
+                      tags={[]}
+                      className={`card-variant-${(index % 4) + 1}`}
+                    />
+                  </Link>
+                ))}
+              </div>
+            </section>
+          )}
+          <div className="back-link-container">
+            <Link to="/roadmaps" className="see-more-button">All Roadmaps</Link>
           </div>
         </div>
       </div>
