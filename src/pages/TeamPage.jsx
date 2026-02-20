@@ -20,8 +20,12 @@ function TeamPage() {
       </div>
       
       <div className="grid-layout team-grid">
-        {teamMembers.map(member => (
-          <Link to={`/team/${member.id}`} key={member.id} className="glass-card team-card card-link">
+        {teamMembers.map((member, index) => (
+          <Link
+            to={`/team/${member.id}`}
+            key={member.id}
+            className={`glass-card team-card card-variant-${(index % 4) + 1} card-link`}
+          >
             <img src={member.photo_url} alt={member.name} />
             <h3>{member.name}</h3>
             <p>{member.role}</p>

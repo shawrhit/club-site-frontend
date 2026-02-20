@@ -422,12 +422,38 @@ body[data-theme="dark"] .footer-social-link {
 .search-close:focus { outline:2px solid rgba(90,163,255,0.3); border-radius:6px; }
 .search-results.visible { display: block; transform: translateX(15px); opacity: 1; }
 .search-loading, .search-empty { padding: 12px; color: var(--muted-text); }
+.search-loading-card {
+  padding: 12px;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+}
+.search-loading-gif {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+}
+.search-loading-text {
+  color: var(--muted-text);
+  font-weight: 700;
+  font-size: 0.92rem;
+}
 .search-section { padding: 8px 6px; border-bottom: 1px dashed rgba(0,0,0,0.06); }
 .search-section-title { font-weight:700; text-transform:capitalize; margin-bottom:6px; font-size:0.9rem; color:var(--text-color); }
 .search-item { display:flex; gap:12px; width:100%; text-align:left; padding:10px; background:transparent; border:none; cursor:pointer; align-items:center; border-radius:10px; transition: background 160ms ease, transform 160ms ease; }
 .search-item:hover { background: rgba(0,0,0,0.04); transform: translateY(-2px); }
 .search-item-thumb { width:64px; height:48px; object-fit:cover; border-radius:10px; flex:0 0 64px; background:var(--card-blue); color:var(--background-color); display:block; box-shadow: 0 6px 18px rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.04); }
 .search-item-thumb.fallback { display:flex; align-items:center; justify-content:center; font-weight:700; font-size:1rem; }
+.search-item-thumb--roadmap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.55rem;
+  line-height: 1;
+}
 .search-item-body { flex:1 1 auto; min-width:0; }
 .search-item-title { font-weight:700; color:var(--primary-accent); }
 .search-item-summary { font-size:0.86rem; color:var(--muted-text); margin-top:6px; }
@@ -751,7 +777,7 @@ body[data-theme="dark"] .card-variant-4 { background: rgba(52, 168, 83, 0.24); }
 .roadmap-card h3 { font-size: 1.75rem; }
 .roadmap-card .cta-link { margin-top: auto; padding-top: 1rem; font-weight: 700; color: var(--text-color); text-decoration: none; border-bottom: 2px solid var(--text-color); width: fit-content; }
 .team-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
-.team-card { padding: 2rem; text-align: left; height: 100%; }
+.team-card { padding: 2rem; text-align: center; height: 100%; }
 .team-card img { width: 120px; height: 120px; border-radius: 50%; border: 2px solid var(--border-color); margin: 0 auto 1.5rem; object-fit: cover; background: #ffffff; display: block; }
 .team-card h3 { font-size: 1.25rem; margin-bottom: 0.25rem; }
 .team-card p { color: var(--text-color); font-weight: 600; font-size: 0.9rem; }
@@ -2207,6 +2233,12 @@ body[data-theme="dark"] .member-social-icon {
 
 .dev-falling-card:active {
   cursor: grabbing;
+}
+
+@media (max-width: 768px) {
+  .dev-grid .dev-card--note {
+    display: none;
+  }
 }
 
 /* --- Unified dark glass surfaces for card-like components across all pages --- */

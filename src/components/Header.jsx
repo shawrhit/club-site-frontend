@@ -100,19 +100,25 @@ function Header() {
     if (!q || q.length < 2) {
       setSearchResults(null);
       setSearching(false);
+      setShowResults(false);
       return;
     }
     setSearching(true);
+    setShowResults(true);
     if (abortController.current) abortController.current.abort();
     abortController.current = new AbortController();
-    apiFetch(`/api/search/?q=${encodeURIComponent(q)}`, { signal: abortController.current.signal })
+    apiFetch(`/api/search/?q=${encodeURIComponent(q)}`, {
+      signal: abortController.current.signal,
+      skipGlobalLoader: true,
+    })
       .then(res => res.ok ? res.json() : Promise.reject(new Error('Search failed')))
       .then(data => {
         setSearchResults(data);
         setSearching(false);
         setShowResults(true);
       })
-      .catch(() => {
+      .catch((error) => {
+        if (error?.name === 'AbortError') return;
         setSearchResults(null);
         setSearching(false);
       });
@@ -146,6 +152,11 @@ function Header() {
     else if (type === 'events') navigate(`/events/${id}`);
     else if (type === 'roadmaps') navigate(`/roadmaps/${id}`);
   };
+
+  const getRoadmapEmoji = (item) => item?.icon_name || item?.emoji || item?.icon || '🗺️';
+  const getResultThumbnail = (item) =>
+    item?.image_url || item?.photo_url || item?.banner_image || item?.image || item?.profile_image || '/GDG_Logo.png';
+  const getResultTitle = (item) => item?.title || item?.name || item?.author_name || 'Untitled';
 
   return (
     <>
@@ -201,7 +212,16 @@ function Header() {
             />
             <button type="button" className="search-close" onClick={closeSearch} aria-label="Close search">&times;</button>
             <div className={`search-results ${showResults ? 'visible' : ''}`} role="listbox">
-              {searching && <div className="search-loading">Searching...</div>}
+              {searching && (
+                <div className="search-loading-card" aria-live="polite">
+                  <img
+                    src="/GDG-Sticker-Brackets.gif"
+                    alt="Searching"
+                    className="search-loading-gif"
+                  />
+                  <p className="search-loading-text">Searching...</p>
+                </div>
+              )}
               {!searching && searchResults && (
                 <div>
                   {['blogs','projects','events','team','roadmaps'].map((section) => (
@@ -210,13 +230,20 @@ function Header() {
                         <div className="search-section-title">{section}</div>
                         {searchResults[section].map(item => (
                           <button key={`${section}-${item.id}`} className="search-item" onClick={() => handleResultClick(section, item.id)}>
-                            {item.image_url ? (
-                              <img className="search-item-thumb" src={item.image_url} alt="" />
+                            {section === 'roadmaps' ? (
+                              <div className="search-item-thumb search-item-thumb--roadmap" aria-hidden="true">
+                                {getRoadmapEmoji(item)}
+                              </div>
                             ) : (
-                              <div className="search-item-thumb fallback">{(item.title||item.name||'').charAt(0)}</div>
+                              <img
+                                className="search-item-thumb"
+                                src={getResultThumbnail(item)}
+                                alt={`${getResultTitle(item)} thumbnail`}
+                                loading="lazy"
+                              />
                             )}
                             <div className="search-item-body">
-                              <div className="search-item-title">{item.title || item.name || item.author_name}</div>
+                              <div className="search-item-title">{getResultTitle(item)}</div>
                               {item.summary && <div className="search-item-summary">{item.summary}</div>}
                               {item.tags && item.tags.length > 0 && (
                                 <div className="search-item-tags">

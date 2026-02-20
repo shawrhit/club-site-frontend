@@ -21,6 +21,8 @@ const CARD_DEFS = [
   { id: 'note', title: 'Note' },
 ];
 
+const getCardVariantClass = (index) => `card-variant-${(index % 4) + 1}`;
+
 function renderCardBody(id) {
   if (id === 'tech') {
     return (
@@ -278,11 +280,11 @@ export default function DevPage() {
         </p>
 
         <div className={`dev-grid ${isBroken ? 'dev-grid--broken' : ''}`}>
-          {CARD_DEFS.map((card) => (
+          {CARD_DEFS.map((card, index) => (
             <article
               key={card.id}
               ref={(node) => setCardRef(card.id, node)}
-              className="dev-card"
+              className={`dev-card ${getCardVariantClass(index)} ${card.id === 'note' ? 'dev-card--note' : ''}`}
               onClick={() => breakWebsite(card.id)}
               role="button"
               tabIndex={0}
@@ -305,11 +307,12 @@ export default function DevPage() {
           {bodies.map((body) => {
             const card = CARD_DEFS.find((item) => item.id === body.id);
             if (!card) return null;
+            const cardIndex = CARD_DEFS.findIndex((item) => item.id === body.id);
 
             return (
               <article
                 key={body.id}
-                className="dev-card dev-falling-card"
+                className={`dev-card dev-falling-card ${getCardVariantClass(cardIndex)} ${card.id === 'note' ? 'dev-card--note' : ''}`}
                 style={{
                   width: `${body.w}px`,
                   height: `${body.h}px`,
