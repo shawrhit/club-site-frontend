@@ -13,6 +13,7 @@ function BlogSection({ blogPosts = [], loading = false }) {
       eyebrow="LATEST"
       title="Latest from the Blog"
       subtitle="Insights, tutorials, and stories from our members. Dive in and learn something new."
+      seeAllLink={{ href: "/blog", text: "See All Posts →" }}
     >
       <div className="grid-layout">
         {showBlogPosts.map((post, index) => (
@@ -28,10 +29,6 @@ function BlogSection({ blogPosts = [], loading = false }) {
           </Link>
         ))}
         {!showBlogPosts.length && loading && <div className="muted">Loading posts...</div>}
-      </div>
-      
-      <div className="see-more-container">
-        <Link to="/blog" className="see-more-button">See All Posts</Link>
       </div>
     </Section>
   );

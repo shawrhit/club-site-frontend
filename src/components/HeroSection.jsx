@@ -1,19 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
 function HeroSection() {
-  const [pillText, setPillText] = useState("Weekly Blogs");
+  const texts = ["Weekly Blogs", "Open Source", "Projects", "Roadmaps", "Events"];
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const timeoutRef = useRef(null);
   
   useEffect(() => {
-    const texts = ["Weekly Blogs", "Open Source", "Projects", "Roadmaps", "Events"];
-    let currentIndex = 0;
-    
     const interval = setInterval(() => {
-      currentIndex = (currentIndex + 1) % texts.length;
-      setPillText(texts[currentIndex]);
-    }, 2000);
+      setIsAnimating(true);
+      // After exit animation completes, change text and trigger enter animation
+      timeoutRef.current = setTimeout(() => {
+        setCurrentIndex((prev) => (prev + 1) % texts.length);
+        setIsAnimating(false);
+      }, 300); // Match exit animation duration
+    }, 2500);
     
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
   }, []);
 
   return (
@@ -38,7 +45,11 @@ function HeroSection() {
           <div className="hero-blob blob-pink"></div>
           <div className="hero-blob blob-yellow"></div>
           <Link to="/join" className="hero-pill">Join our community</Link>
-          <div key={pillText} className="hero-pill alt animate-pop-in">{pillText}</div>
+          <div 
+            className={`hero-pill alt ${isAnimating ? 'animate-pop-out' : 'animate-pop-in'}`}
+          >
+            {texts[currentIndex]}
+          </div>
         </div>
       </div>
     </section>

@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import GlassCard from '../components/GlassCard';
+import { SkeletonGrid } from '../components/SkeletonCard';
 import { apiFetch } from '../api';
 import { formatCalendarDate } from '../utils/eventRegistration';
 import { buildDetailPath } from '../utils/contentRouting';
 
 function EventsPage() {
   const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
   const heroEvent = events[0];
   const remainingEvents = events.slice(1);
 
@@ -21,12 +24,23 @@ function EventsPage() {
           ? [...data].sort((a, b) => new Date(b.event_date || 0) - new Date(a.event_date || 0))
           : [];
         setEvents(sortedEvents);
+        setLoading(false);
       })
-      .catch((error) => console.error('Error fetching events:', error));
+      .catch((error) => {
+        console.error('Error fetching events:', error);
+        setLoading(false);
+      });
   }, []);
 
   return (
     <main className="page-container blog-page events-page">
+      <Helmet>
+        <title>Events | GDG On Campus NEHU</title>
+        <meta name="description" content="Upcoming events and build nights at GDG On Campus NEHU. Hands-on workshops, demos, and meetups for every skill level." />
+        <meta property="og:title" content="Events | GDG On Campus NEHU" />
+        <meta property="og:description" content="Upcoming events and build nights at GDG On Campus NEHU." />
+        <meta property="og:type" content="website" />
+      </Helmet>
       <section className="blog-hero hero-green">
         <div className="blog-hero-inner">
           <div className="blog-hero-media">
@@ -81,19 +95,23 @@ function EventsPage() {
           <h2>More events</h2>
           <p>Keep building with the community each month.</p>
         </div>
-        <div className="grid-layout">
-          {remainingEvents.map((event) => (
-            <Link to={buildDetailPath('events', event)} key={event.id} className="card-link">
-              <GlassCard
-                imgSrc={event.image_url}
-                title={event.title}
-                description={event.summary}
-                tags={(event.tags || []).map(getTagName).filter(Boolean)}
-                date={event.event_date}
-              />
-            </Link>
-          ))}
-        </div>
+        {loading ? (
+          <SkeletonGrid count={3} variant="card" />
+        ) : (
+          <div className="grid-layout">
+            {remainingEvents.map((event) => (
+              <Link to={buildDetailPath('events', event)} key={event.id} className="card-link">
+                <GlassCard
+                  imgSrc={event.image_url}
+                  title={event.title}
+                  description={event.summary}
+                  tags={(event.tags || []).map(getTagName).filter(Boolean)}
+                  date={event.event_date}
+                />
+              </Link>
+            ))}
+          </div>
+        )}
       </section>
     </main>
   );

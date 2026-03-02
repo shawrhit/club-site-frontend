@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import GlassCard from '../components/GlassCard';
+import { SkeletonGrid } from '../components/SkeletonCard';
 import { apiFetch } from '../api';
 import { buildDetailPath } from '../utils/contentRouting';
 
 function ProjectsPage() {
   const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
   const heroProject = projects[0];
   const remainingProjects = projects.slice(1);
   const getTagName = (tag) => (typeof tag === 'string' ? tag : tag?.name);
@@ -21,12 +24,25 @@ function ProjectsPage() {
   useEffect(() => {
     apiFetch('/api/projects/')
       .then(response => response.json())
-      .then(data => setProjects(data))
-      .catch(error => console.error('Error fetching projects:', error));
+      .then(data => {
+        setProjects(data);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('Error fetching projects:', error);
+        setLoading(false);
+      });
   }, []);
 
   return (
     <main className="page-container blog-page projects-page">
+      <Helmet>
+        <title>Projects | GDG On Campus NEHU</title>
+        <meta name="description" content="Explore projects built by the GDG On Campus NEHU community. A showcase of creativity, technical skills, and collaborative innovation." />
+        <meta property="og:title" content="Projects | GDG On Campus NEHU" />
+        <meta property="og:description" content="Explore projects built by the GDG On Campus NEHU community." />
+        <meta property="og:type" content="website" />
+      </Helmet>
       <section className="blog-hero hero-blue">
         <div className="blog-hero-inner">
           <div className="blog-hero-media">
@@ -76,19 +92,23 @@ function ProjectsPage() {
           <h2>More projects</h2>
           <p>Build logs, demos, and product ideas from the community.</p>
         </div>
-        <div className="grid-layout">
-          {remainingProjects.map(project => (
-            <Link to={buildDetailPath('projects', project)} key={project.id} className="card-link">
-              <GlassCard
-                imgSrc={project.image_url}
-                title={project.title}
-                description={project.description}
-                tags={(project.tags || []).map(getTagName).filter(Boolean)}
-                date={project.published_date}
-              />
-            </Link>
-          ))}
-        </div>
+        {loading ? (
+          <SkeletonGrid count={3} variant="card" />
+        ) : (
+          <div className="grid-layout">
+            {remainingProjects.map(project => (
+              <Link to={buildDetailPath('projects', project)} key={project.id} className="card-link">
+                <GlassCard
+                  imgSrc={project.image_url}
+                  title={project.title}
+                  description={project.description}
+                  tags={(project.tags || []).map(getTagName).filter(Boolean)}
+                  date={project.published_date}
+                />
+              </Link>
+            ))}
+          </div>
+        )}
       </section>
 
       <div className="back-link-container">

@@ -12,6 +12,7 @@ function TeamSection({ teamMembers = [], loading = false }) {
       eyebrow="PEOPLE"
       title="Meet the Core Team"
       subtitle="The passionate individuals driving GDGOC NEHU's mission and activities."
+      seeAllLink={{ href: "/team", text: "Meet Everyone →" }}
     >
       <div className="grid-layout team-grid">
         {showTeamMembers.map((member, index) => (
@@ -26,9 +27,6 @@ function TeamSection({ teamMembers = [], loading = false }) {
           </Link>
         ))}
         {!showTeamMembers.length && loading && <div className="muted">Loading team...</div>}
-      </div>
-      <div className="see-more-container">
-        <Link to="/team" className="see-more-button">See All Members</Link>
       </div>
     </Section>
   );

@@ -12,6 +12,7 @@ function RoadmapsSection({ roadmaps = [], loading = false }) {
       eyebrow="LEARNING"
       title="Learning Roadmaps"
       subtitle="Curated learning paths to guide you from beginner to expert in key electronics domains."
+      seeAllLink={{ href: "/roadmaps", text: "See All Roadmaps →" }}
     >
       <div className="grid-layout">
         {showRoadmaps.map((roadmap, index) => (
@@ -27,9 +28,6 @@ function RoadmapsSection({ roadmaps = [], loading = false }) {
           </Link>
         ))}
         {!showRoadmaps.length && loading && <div className="muted">Loading roadmaps...</div>}
-      </div>
-      <div className="see-more-container">
-        <Link to="/roadmaps" className="see-more-button">See All Roadmaps</Link>
       </div>
     </Section>
   );

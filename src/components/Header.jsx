@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { apiFetch } from '../api';
 import { buildSearchResultPath } from '../utils/contentRouting';
 
@@ -171,12 +171,12 @@ function Header() {
         </div>
 
         <ul className="nav-links">
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/projects">Projects</Link></li>
-          <li><Link to="/blog">Blog</Link></li>
-          <li><Link to="/events">Events</Link></li>
-          <li><Link to="/roadmaps">Roadmaps</Link></li>
-          <li><Link to="/team">Team</Link></li>
+          <li><NavLink to="/" className={({ isActive }) => isActive ? 'nav-link-active' : ''} end>Home</NavLink></li>
+          <li><NavLink to="/projects" className={({ isActive }) => isActive ? 'nav-link-active' : ''}>Projects</NavLink></li>
+          <li><NavLink to="/blog" className={({ isActive }) => isActive ? 'nav-link-active' : ''}>Blog</NavLink></li>
+          <li><NavLink to="/events" className={({ isActive }) => isActive ? 'nav-link-active' : ''}>Events</NavLink></li>
+          <li><NavLink to="/roadmaps" className={({ isActive }) => isActive ? 'nav-link-active' : ''}>Roadmaps</NavLink></li>
+          <li><NavLink to="/team" className={({ isActive }) => isActive ? 'nav-link-active' : ''}>Team</NavLink></li>
         </ul>
 
         <div className={`nav-actions ${showSearchInput ? 'nav-actions--hide-controls' : ''}`}>

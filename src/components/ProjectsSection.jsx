@@ -14,6 +14,7 @@ function ProjectsSection({ projects = [], loading = false }) {
       eyebrow="FEATURED"
       title="What We Build"
       subtitle="From electronics prototypes to impactful software, our projects reflect our shared drive to learn, build, and innovate."
+      seeAllLink={{ href: "/projects", text: "See All Projects →" }}
     >
       <div className="grid-layout">
         {showProjects.map((project, index) => (
@@ -29,9 +30,6 @@ function ProjectsSection({ projects = [], loading = false }) {
           </Link>
         ))}
         {!showProjects.length && loading && <div className="muted">Loading projects...</div>}
-      </div>
-      <div className="see-more-container">
-        <Link to="/projects" className="see-more-button">See All Projects</Link>
       </div>
     </Section>
   );

@@ -14,6 +14,7 @@ function EventsSection({ events = [], loading = false }) {
       eyebrow="HAPPENING"
       title="Events & Meetups"
       subtitle="Workshops, build nights, and demos you can join in person or online."
+      seeAllLink={{ href: "/events", text: "See All Events →" }}
     >
       <div className="grid-layout">
         {showEvents.map((event, index) => (
@@ -29,9 +30,6 @@ function EventsSection({ events = [], loading = false }) {
           </Link>
         ))}
         {!showEvents.length && loading && <div className="muted">Loading events...</div>}
-      </div>
-      <div className="see-more-container">
-        <Link to="/events" className="see-more-button">See All Events</Link>
       </div>
     </Section>
   );
