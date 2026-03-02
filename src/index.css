@@ -772,6 +772,44 @@ body[data-theme="dark"] .search-item-thumb {
 }
 .grid-layout { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 2rem; text-align: left; align-items: stretch; }
 
+/* Hero meta (date + author) */
+.blog-hero-meta {
+  display: flex;
+  gap: 0.45rem;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 0.4rem;
+}
+.blog-hero-date {
+  font-weight: 600;
+  color: var(--text-color);
+}
+.blog-hero-author {
+  font-size: 0.95rem;
+  color: var(--muted-text);
+  margin: 0;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+@media (max-width: 760px) {
+  .blog-hero-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+  }
+  .section-see-all { align-self: flex-start; margin-top: 0.5rem; margin-right: 0; }
+  .blog-hero-author { font-size: 0.92rem; }
+}
+
+/* Author line in hero */
+.blog-hero-author {
+  font-size: 0.95rem;
+  color: var(--muted-text);
+  margin: 0; /* keep it tightly aligned with the date */
+  font-weight: 600;
+}
+
 /* Tag pages: enforce two items per row on desktop, one on small screens */
 .tag-grid {
   display: grid;

@@ -159,6 +159,17 @@ function ProjectDetailPage() {
     project.banner_image || project.image_url || project.image || 'https://gdgnehu.pages.dev/og-default.png';
   const pageUrl =
     typeof window !== 'undefined' ? window.location.href : `https://gdgnehu.pages.dev/projects/${slug}`;
+  const authorName = (
+    project?.author_name ||
+    project?.author?.name ||
+    project?.created_by_name ||
+    project?.created_by?.name ||
+    project?.creator?.name ||
+    project?.owner?.name ||
+    project?.owner ||
+    project?.author ||
+    ''
+  );
   const repoUrl = ensureExternalUrl(project.repo_url);
   const demoUrl = ensureExternalUrl(project.demo_url);
   const openSourceState =
@@ -234,9 +245,10 @@ function ProjectDetailPage() {
             </div>
             <h1 className="blog-hero-title">{project.title}</h1>
             {project.description && <p className="blog-hero-dek">{project.description}</p>}
-            {formattedDate && (
+            {(formattedDate || authorName) && (
               <p className="blog-hero-meta">
-                <span className="blog-hero-date">{formattedDate}</span>
+                {formattedDate && <span className="blog-hero-date">{formattedDate}</span>}
+                {authorName && <span className="blog-hero-author">By {authorName}</span>}
               </p>
             )}
             <div className="blog-hero-actions">
