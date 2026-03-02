@@ -360,10 +360,16 @@ function EventDetailPage() {
                     {speaker.role && <p className="event-speaker-role">{speaker.role}</p>}
                     {speaker.bio && <p className="event-speaker-bio">{speaker.bio}</p>}
                     {speaker.social_link && (
-                      <a href={speaker.social_link} target="_blank" rel="noopener noreferrer" className="event-speaker-link">
-                        <IconBadge kind="social" />
-                        LinkedIn
-                      </a>
+                      <div className="event-speaker-links">
+                        <a href={speaker.social_link} target="_blank" rel="noopener noreferrer" className="event-speaker-link">
+                          <span className="speaker-pill-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24">
+                              <path fill="currentColor" d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.64h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.66 4.78 6.11V21h-4v-5.45c0-1.3-.02-2.98-1.82-2.98-1.82 0-2.1 1.42-2.1 2.88V21H9z" />
+                            </svg>
+                          </span>
+                          LinkedIn
+                        </a>
+                      </div>
                     )}
                   </article>
                 ))}
