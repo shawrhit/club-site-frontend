@@ -276,7 +276,7 @@ export default function DevPage() {
 
         <h1>Developer Den</h1>
         <p className={`dev-break-warning ${isBroken ? 'visible' : ''}`}>
-          oh no, you broke the website, i warned you it is held together wo hopes, dreams and glue
+          oh no, you broke the website, i warned you it is held together with hopes, dreams and glue
         </p>
 
         <div className={`dev-grid ${isBroken ? 'dev-grid--broken' : ''}`}>
