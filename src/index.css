@@ -349,13 +349,13 @@ body[data-theme="dark"] .footer-social-link {
   display: inline-block;
 }
 
-.brand-short { display: none; }
+.logo .brand-short { display: none; }
 @media (max-width: 768px) {
   .logo a { transform: translateY(3px); gap: 0.32rem; }
   .logo-mark { width: 52px; height: 52px; border-radius: 8px; }
   .logo { min-width: 0; }
-  .brand-full { display: none; }
-  .brand-short {
+  .logo .brand-full { display: none; }
+  .logo .brand-short {
     display: inline-block;
     white-space: nowrap;
     font-size: clamp(1.06rem, 4.9vw, 1.26rem);

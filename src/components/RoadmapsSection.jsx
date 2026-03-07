@@ -11,7 +11,7 @@ function RoadmapsSection({ roadmaps = [], loading = false }) {
       id="roadmaps"
       eyebrow="LEARNING"
       title="Learning Roadmaps"
-      subtitle="Curated learning paths to guide you from beginner to expert in key electronics domains."
+      subtitle="Curated learning paths to guide you from beginner to expert across core technology domains."
       seeAllLink={{ href: "/roadmaps", text: "See All Roadmaps →" }}
     >
       <div className="grid-layout">

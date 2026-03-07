@@ -29,7 +29,6 @@ function HeroSection() {
         <div className="hero-content">
           <p className="hero-eyebrow">
             <span className="brand-full">Google Developer's Group On Campus, North Eastern Hill University</span>
-            <span className="brand-short">GDGoC NEHU</span>
           </p>
           <h1 className="hero-headline">Engineering the Future, Together.</h1>
           <p className="hero-subheadline">
