@@ -7,6 +7,7 @@ import RoadmapsSection from '../components/RoadmapsSection';
 import TeamSection from '../components/TeamSection';
 import TagsSection from '../components/TagsSection';
 import { loadLandingData } from '../utils/landingData';
+import { CLUB_INFO } from '../config/siteLinks';
 
 function HomePage() {
   const [landingData, setLandingData] = useState({
@@ -50,6 +51,19 @@ function HomePage() {
       <RoadmapsSection roadmaps={landingData.roadmaps} loading={loading} />
       <TeamSection teamMembers={landingData.team} loading={loading} />
       <TagsSection tags={landingData.tags} loading={loading} error={error} />
+      <section className="home-hire-strip" aria-labelledby="hire-strip-title">
+        <div className="home-hire-strip-inner">
+          <p className="home-hire-strip-eyebrow">Freelance And Hiring</p>
+          <h2 id="hire-strip-title">Need a team that can build and manage the work?</h2>
+          <p>
+            GDG NEHU team is available for freelance projects.
+            We can manage end-to-end execution for your work.
+          </p>
+          <a href={`mailto:${CLUB_INFO.email}`} className="home-hire-strip-link">
+            Email us: {CLUB_INFO.email}
+          </a>
+        </div>
+      </section>
     </main>
   );
 }

@@ -1,12 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
+import { Linkedin, Instagram, Github, Globe } from 'lucide-react';
 import DOMPurify from 'dompurify';
 import GlassCard from '../components/GlassCard';
 import { apiFetch, fetchBlogDetail } from '../api';
 import { processContent } from '../utils/contentProcessor';
 import { buildDetailPath } from '../utils/contentRouting';
 import '../styles/CKEditorContent.css';
+
+function AuthorSocialIcon({ type }) {
+  if (type === 'instagram') return <Instagram size={16} aria-hidden="true" />;
+  if (type === 'linkedin') return <Linkedin size={16} aria-hidden="true" />;
+  if (type === 'github') return <Github size={16} aria-hidden="true" />;
+  return <Globe size={16} aria-hidden="true" />;
+}
 
 function BlogDetailPage() {
   const { slug } = useParams();
@@ -90,6 +98,29 @@ function BlogDetailPage() {
   const tagList = (post.tags || []).map((tag) => (typeof tag === 'string' ? tag : tag.name)).filter(Boolean);
   const relatedPosts = Array.isArray(post.related_posts) ? post.related_posts : [];
   const suggestedPosts = relatedPosts.length > 0 ? relatedPosts.slice(0, 3) : morePosts;
+  const normalizedAuthors = (
+    Array.isArray(post.authors) && post.authors.length > 0
+      ? post.authors
+      : post.author
+        ? [post.author]
+        : post.author_name
+          ? [{ name: post.author_name, photo_url: post.author_photo_url || post.photo_url }]
+          : []
+  )
+    .filter(Boolean)
+    .map((author) => {
+      const socialLinks = [
+        { type: 'instagram', label: 'Instagram', url: author.instagram_url || author.instagram },
+        { type: 'linkedin', label: 'LinkedIn', url: author.linkedin_url || author.linkedin },
+        { type: 'github', label: 'GitHub', url: author.github_url || author.github },
+        { type: 'website', label: 'Website', url: author.website_url || author.website },
+      ].filter((link) => link.url);
+
+      return {
+        ...author,
+        socialLinks,
+      };
+    });
   const summaryText = post.summary || '';
   const pageTitle = `${post.title || 'Blog'} | GDGOC NEHU`;
   const pageDescription = post.short_description || post.summary || 'Read more on GDGOC NEHU';
@@ -178,24 +209,43 @@ function BlogDetailPage() {
             dangerouslySetInnerHTML={{ __html: sanitizedContent }}
           />
 
-          {post.author && (
-            <div className="author-box">
-              {post.author.photo_url ? (
-                <img src={post.author.photo_url} alt={post.author.name} className="author-photo" />
-              ) : (
-                <div className="author-photo author-photo-placeholder" aria-hidden="true" />
-              )}
-              <div className="author-details">
-                <h3>About the Author</h3>
-                <p className="author-name">{post.author.name}</p>
-                <p>{post.author.bio}</p>
-                {post.author.linkedin_url && (
-                  <a href={post.author.linkedin_url} target="_blank" rel="noopener noreferrer" className="author-link">
-                    Visit Profile
-                  </a>
-                )}
-              </div>
-            </div>
+          {normalizedAuthors.length > 0 && (
+            <>
+              {normalizedAuthors.map((author, index) => (
+                <div className="author-block" key={`${author.id || author.name || 'author'}-${index}`}>
+                  {index === 0 && <h3 className="author-section-title">About Author</h3>}
+                  <div className="author-box">
+                    {author.photo_url ? (
+                      <img src={author.photo_url} alt={author.name || 'Author'} className="author-photo" />
+                    ) : (
+                      <div className="author-photo author-photo-placeholder" aria-hidden="true" />
+                    )}
+                    <div className="author-details">
+                      <p className="author-name">{author.name || post.author_name || 'GDGOC NEHU Author'}</p>
+                      {author.bio && <p>{author.bio}</p>}
+                      {author.socialLinks.length > 0 && (
+                        <div className="author-social-list">
+                          {author.socialLinks.map((link) => (
+                            <a
+                              key={link.label}
+                              href={link.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="author-social-link"
+                              aria-label={link.label}
+                              title={link.label}
+                            >
+                              <AuthorSocialIcon type={link.type} />
+                              <span className="sr-only">{link.label}</span>
+                            </a>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </>
           )}
 
           {suggestedPosts.length > 0 && (
